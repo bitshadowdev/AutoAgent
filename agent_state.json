@@ -1,0 +1,14 @@
+{
+  "task": "Dame una lista de las top 10 canciones en las listas internacionales",
+  "transcript": [
+    {
+      "role": "assistant",
+      "content": "[Coder] Lista de top 10 canciones en listas internacionales\n\nRespuesta propuesta:\n[{'title': 'Blinding Lights', 'artist': 'The Weeknd', 'position': 1}, {'title': 'Roses', 'artist': 'SAINt JHN', 'position': 2}, {'title': 'Dance Monkey', 'artist': 'Tones and I', 'position': 3}, {'title': 'Rockstar', 'artist': 'DaBaby feat. Roddy Ricch', 'position': 4}, {'title': 'Laugh Now Cry Later', 'artist': 'Drake feat. Lil Durk', 'position': 5}, {'title': 'Mood', 'artist': '24kGoldn feat. iann dior', 'position': 6}, {'title': 'Willow', 'artist': 'Taylor Swift', 'position': 7}, {'title': 'Good 4 U', 'artist': 'Olivia Rodrigo', 'position': 8}, {'title': 'Kiss Me More', 'artist': 'Doja Cat feat. SZA', 'position': 9}, {'title': 'Stay', 'artist': 'The Kid LAROI feat. Justin Bieber', 'position': 10}]"
+    },
+    {
+      "role": "user",
+      "content": "[Supervisor] La respuesta propuesta es una lista de canciones, pero no especifica las listas internacionales ni proporciona una fuente verificable.\nConsejos: ['Asegúrate de especificar las listas internacionales que se están considerando, como Billboard o Spotify', 'Incluye una fuente verificable para apoyar tus resultados', 'Considera agregar la fecha de publicación o el período de tiempo considerado para las listas']"
+    }
+  ],
+  "tool_registry": {}
+}
