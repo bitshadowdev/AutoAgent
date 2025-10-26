@@ -1,0 +1,61 @@
+<!doctype html><meta charset='utf-8'><title>Timeline</title>
+<style>body{font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:24px} details{margin:8px 0;padding:8px 12px;border:1px solid #ddd;border-radius:10px} summary{font-weight:600;cursor:pointer} code,pre{font-family:ui-monospace,Consolas,Monaco,monospace} .ts{color:#555;margin-left:6px} .meta{color:#777}</style>
+<h1>Timeline de ejecución</h1><div class='meta'>Total eventos: 8</div>
+<details open>
+<summary>01. system · run_started <span class='ts'>[2025-10-26T01:38:41.729796+00:00]</span></summary>
+<p>task=dime lugares que hayan al rededor del contanera center para comer ramen cerca de general holley,providencia, santiago de chile</p>
+<pre>
+{
+  &quot;max_turns&quot;: 10
+}
+</pre>
+</details>
+<details open>
+<summary>02. assistant · coder_step_request <span class='ts'>[2025-10-26T01:38:41.730844+00:00]</span></summary>
+<p>consulta al Coder</p>
+</details>
+<details open>
+<summary>03. assistant · coder_parse_error <span class='ts'>[2025-10-26T01:38:47.285574+00:00]</span></summary>
+<p>Error al llamar al LLM: 400 - {&quot;error&quot;:{&quot;code&quot;:&quot;invalid_prompt&quot;,&quot;message&quot;:&quot;AiError: AiError: Unknown recipient: &lt;|constrain|&gt;create_tool (610f939f-4e26-47de-9c66-793c87d56288)&quot;}}</p>
+</details>
+<details open>
+<summary>04. assistant · coder_step_request <span class='ts'>[2025-10-26T01:38:47.293145+00:00]</span></summary>
+<p>consulta al Coder</p>
+</details>
+<details open>
+<summary>05. assistant · coder_step_parsed <span class='ts'>[2025-10-26T01:38:51.172896+00:00]</span></summary>
+<p>type=final</p>
+<pre>
+{
+  &quot;keys&quot;: [
+    &quot;type&quot;,
+    &quot;message&quot;,
+    &quot;answer&quot;
+  ]
+}
+</pre>
+</details>
+<details open>
+<summary>06. assistant · coder_final_proposal <span class='ts'>[2025-10-26T01:38:51.174911+00:00]</span></summary>
+<p>Lista de ramen cerca del Costanera Center en Providencia, Santiago de Chile.</p>
+<pre>
+{
+  &quot;answer_path&quot;: &quot;.runs\\2025-10-25_22-37-38\\final\\turn_002_answer.txt&quot;
+}
+</pre>
+</details>
+<details open>
+<summary>07. assistant · supervisor_decision <span class='ts'>[2025-10-26T01:38:53.643813+00:00]</span></summary>
+<p>route=end</p>
+<pre>
+{
+  &quot;route&quot;: &quot;end&quot;,
+  &quot;reason&quot;: &quot;Respuesta clara y útil con lista de ramen cerca del Costanera Center, cumpliendo la solicitud.&quot;,
+  &quot;tips&quot;: []
+}
+</pre>
+</details>
+<details open>
+<summary>08. system · run_finished <span class='ts'>[2025-10-26T01:38:53.646150+00:00]</span></summary>
+<p>end</p>
+</details>

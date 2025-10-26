@@ -1,0 +1,6 @@
+[
+  {
+    "role": "assistant",
+    "content": "[Coder] Código Python simple para reproducir un archivo de sonido\n\nPropuesta de respuesta:\n```python\n# Reproduce un sonido en Python\n# Requiere la librería `playsound`. Instálala con: pip install playsound==1.2.2\n# (La versión 1.2.2 funciona tanto en Windows como en macOS/Linux)\n\nfrom playsound import playsound\nimport os\n\n# Ruta al archivo de sonido (puedes usar .mp3, .wav, .ogg, etc.)\n# Asegúrate de que la ruta sea correcta y el archivo exista.\n# Ejemplo: sonido.wav en el mismo directorio que este script.\n\nsound_path = os.path.join(os.path.dirname(__file__), \"sonido.wav\")\n\nif not os.path.isfile(sound_path):\n    raise FileNotFoundError(f\"Archivo de sonido no encontrado: {sound_path}\")\n\n# Reproduce el sonido. La función bloquea hasta que termina la reproducción.\nplaysound(sound_path)\n```\n\n**Instrucciones**\n1. Guarda este código en un archivo, por ejemplo `reproducir_sonido.py`.\n2. Coloca el archivo de audio que deseas reproducir (por ejemplo `sonido.wav`) en el mismo directorio.\n3. Instala la dependencia con `pip install playsound==1.2.2`.\n4. Ejecuta el script: `python reproducir_sonido.py`.\n\nEl script reproducirá el sonido especificado y se detendrá cuando termine la reproducción."
+  }
+]

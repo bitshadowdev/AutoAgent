@@ -1,0 +1,66 @@
+{
+  "agents": {
+    "FactCheckerAgent": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.agents\\FactCheckerAgent.json",
+      "role": "Agente especializado en verificación de hechos y precisión de la información.",
+      "created_at": "2025-10-26T00:30:26.884469Z",
+      "created_by": "coder",
+      "capabilities": [
+        "verificar datos contra fuentes confiables",
+        "consultar bases de datos públicas y sitios web autorizados",
+        "identificar posibles inexactitudes o afirmaciones no sustentadas",
+        "generar un reporte de factualidad con evidencias y referencias",
+        "proveer correcciones o sugerencias de mejora"
+      ]
+    },
+    "verificador_factual": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.agents\\verificador_factual.json",
+      "role": "Verificador de hechos y factualidad",
+      "created_at": "2025-10-26T00:34:10.543362Z",
+      "created_by": "coder",
+      "capabilities": [
+        "verificar_factualidad",
+        "citar_fuentes_confiables",
+        "detectar_inexactitudes_y_misinterpretaciones",
+        "asignar_nivel_de_confianza"
+      ]
+    },
+    "factual_programming_agent": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.agents\\factual_programming_agent.json",
+      "role": "Verificador factual y generador de respuestas a preguntas de programación novedosas",
+      "created_at": "2025-10-26T01:29:11.295059Z",
+      "created_by": "coder",
+      "capabilities": [
+        "verificación_factual",
+        "generación_de_respuestas_programáticas",
+        "explicación_de_hipótesis"
+      ]
+    },
+    "search_agent": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.agents\\search_agent.json",
+      "role": "Agente especializado en búsqueda web con lógica de fallback",
+      "created_at": "2025-10-26T01:54:38.300275Z",
+      "created_by": "coder",
+      "capabilities": [
+        "ejecutar web_search",
+        "manejar resultados vacíos",
+        "aplicar lógica de fallback con consultas alternativas",
+        "interactuar con el usuario para refinar la búsqueda",
+        "registrar detalles de la petición para depuración"
+      ]
+    },
+    "search_hackathon_agent": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.agents\\search_hackathon_agent.json",
+      "role": "Agente especializado en búsqueda web con estrategias de fallback",
+      "created_at": "2025-10-26T01:54:52.305811Z",
+      "created_by": "coder",
+      "capabilities": [
+        "ejecutar web_search",
+        "manejar resultados vacíos",
+        "aplicar lógica de fallback con consultas alternativas",
+        "interactuar con el usuario para refinar la búsqueda",
+        "registrar detalles de la petición"
+      ]
+    }
+  }
+}

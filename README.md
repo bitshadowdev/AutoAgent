@@ -21,7 +21,16 @@ Sistema de agentes inteligentes (Supervisor + Coder) con **persistencia completa
 - **Supervisor**: Evalúa resultados y decide próximos pasos
 - Modo abierto: permite imports, acceso a red, sistema de archivos, etc.
 
-### ✅ Auto-corrección con Retry Inteligente (NUEVO)
+### ✅ Agentes Dinámicos (NUEVO 🤖)
+- **Creación de agentes especializados** durante la ejecución
+- **Coder y Supervisor** pueden crear nuevos agentes para tareas específicas
+- **Persistencia automática** de agentes en disco (`.agents/`)
+- **Reutilización** de agentes entre sesiones
+- **Colaboración multi-agente** para tareas complejas
+- Ejemplos: `data_analyst`, `ux_designer`, `security_auditor`
+- Ver guía completa en [AGENTES_DINAMICOS.md](AGENTES_DINAMICOS.md)
+
+### ✅ Auto-corrección con Retry Inteligente
 - **Detección automática de errores** con sugerencias específicas
 - **Actualización de herramientas** con el mismo nombre cuando fallan
 - **Feedback iterativo** del Supervisor con tips accionables
@@ -150,6 +159,28 @@ python sistema_agentes_supervisor_coder.py --tools-list
 python sistema_agentes_supervisor_coder.py --tools-dir /ruta/custom -q "tarea"
 ```
 
+## 🤖 Gestión de Agentes Dinámicos
+
+### Listar agentes creados
+
+```bash
+python sistema_agentes_supervisor_coder.py --agents-list
+```
+
+### Ejemplo de uso: Crear un agente analista
+
+```bash
+python sistema_agentes_supervisor_coder.py -q "Analiza el archivo datos.csv y genera insights" --session-id analisis
+```
+
+El Coder automáticamente creará un agente `data_analyst` si lo necesita.
+
+### Cambiar directorio de agentes
+
+```bash
+python sistema_agentes_supervisor_coder.py --agents-dir /ruta/custom -q "tarea"
+```
+
 ## 📁 Estructura del Proyecto
 
 ```
@@ -157,12 +188,16 @@ AutoAgent/
 ├── coreee/
 │   ├── sistema_agentes_supervisor_coder.py  # Sistema principal
 │   ├── session_manager.py                   # Gestión de sesiones
+│   ├── agent_registry.py                    # Registro de agentes dinámicos
 │   ├── manage_sessions.py                   # CLI para sesiones
 │   ├── llm_client.py                        # Cliente LLM
 │   └── timeline_recorder.py                 # Grabación de eventos
 ├── .permanent_tools/                         # Herramientas persistentes
 │   ├── manifest.json                        # Metadatos de herramientas
 │   └── *.py                                 # Archivos de herramientas
+├── .agents/                                  # Agentes dinámicos
+│   ├── manifest.json                        # Índice de agentes
+│   └── *.json                               # Definiciones de agentes
 ├── .sessions/                                # Sesiones persistentes
 │   ├── index.json                           # Índice de sesiones
 │   └── *.json                               # Datos de sesiones

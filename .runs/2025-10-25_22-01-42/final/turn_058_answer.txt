@@ -1,0 +1,5 @@
+Por favor, proporcione una afirmación científica concreta que desea que el agente factual verifique. Ejemplos:
+- "El agua hierve a 100 °C al nivel del mar."
+- "La luz viaja a 299 792 458 m/s en el vacío."
+- "Los delfines son mamíferos."
+Incluya la afirmación entre comillas simples o dobles para evitar ambigüedades.

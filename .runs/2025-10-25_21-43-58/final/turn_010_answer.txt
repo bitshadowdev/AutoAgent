@@ -1,0 +1,6 @@
+Para crear el archivo HTML que se integre con la lógica de los runs y los eventos, necesito que me proporciones los contenidos relevantes de los archivos que se encuentran en:
+
+- C:\Users\israe\OneDrive\Escritorio\AutoAgent\coreee (por ejemplo, módulos, clases o funciones que manejan los runs y los eventos).
+- C:\Users\israe\OneDrive\Escritorio\AutoAgent\.runs (por ejemplo, ejemplos de archivos JSON o estructuras de datos que describen los runs y los eventos).
+
+Con esa información podré generar una plantilla HTML autónoma con el CSS y JavaScript necesarios para cargar y visualizar los datos. Por favor, copia y pega aquí el contenido de los archivos clave o una descripción detallada de su estructura.

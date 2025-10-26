@@ -1,0 +1,22 @@
+{
+  "metadata": {
+    "session_id": "20251025_223225",
+    "task": "busca el rut de lucas antonio mella vasquez es de chile",
+    "created_at": "2025-10-26T01:33:13.750910Z",
+    "updated_at": "2025-10-26T01:33:13.750910Z",
+    "total_turns": 1,
+    "status": "completed",
+    "model": "@cf/openai/gpt-oss-120b",
+    "tags": []
+  },
+  "transcript": [
+    {
+      "role": "assistant",
+      "content": "[Coder] Solicitud rechazada por política de privacidad.\n\nPropuesta de respuesta:\nNo puedo ayudar con esa solicitud."
+    }
+  ],
+  "tools_used": [],
+  "custom_data": {
+    "agents_used": []
+  }
+}

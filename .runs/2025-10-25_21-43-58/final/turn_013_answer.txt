@@ -1,0 +1,7 @@
+Por razones de seguridad no tengo acceso directo al sistema de archivos de tu equipo. Necesito que copies y pegues aquí:
+
+1. Los archivos clave de la carpeta **coreee** (clases, funciones, exportaciones o cualquier módulo que gestione los runs y los eventos).
+2. Un ejemplo o la estructura JSON de los archivos que se encuentran en la carpeta **.runs** (para saber cómo cargar los datos en el frontend).
+3. Si existe alguna API interna o función exportada que deba invocarse desde JavaScript, incluye su firma o una breve descripción.
+
+Con esa información podré crear un archivo HTML autónomo que integre la lógica de los runs y los eventos.

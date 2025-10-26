@@ -1,0 +1,59 @@
+<!doctype html><meta charset='utf-8'><title>Timeline</title>
+<style>body{font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:24px} details{margin:8px 0;padding:8px 12px;border:1px solid #ddd;border-radius:10px} summary{font-weight:600;cursor:pointer} code,pre{font-family:ui-monospace,Consolas,Monaco,monospace} .ts{color:#555;margin-left:6px} .meta{color:#777}</style>
+<h1>Timeline de ejecución</h1><div class='meta'>Total eventos: 6</div>
+<details open>
+<summary>01. system · session_resumed <span class='ts'>[2025-10-26T00:35:04.106801+00:00]</span></summary>
+<p>session_id=20251025_213354</p>
+<pre>
+{
+  &quot;transcript_length&quot;: 1
+}
+</pre>
+</details>
+<details open>
+<summary>02. assistant · coder_step_request <span class='ts'>[2025-10-26T00:35:04.106801+00:00]</span></summary>
+<p>consulta al Coder</p>
+</details>
+<details open>
+<summary>03. assistant · coder_step_parsed <span class='ts'>[2025-10-26T00:35:05.896908+00:00]</span></summary>
+<p>type=final</p>
+<pre>
+{
+  &quot;keys&quot;: [
+    &quot;type&quot;,
+    &quot;message&quot;,
+    &quot;answer&quot;
+  ]
+}
+</pre>
+</details>
+<details open>
+<summary>04. assistant · coder_final_proposal <span class='ts'>[2025-10-26T00:35:05.896908+00:00]</span></summary>
+<p>Respuesta factual</p>
+<pre>
+{
+  &quot;answer_path&quot;: &quot;.runs\\2025-10-25_21-34-46\\final\\turn_002_answer.txt&quot;
+}
+</pre>
+</details>
+<details open>
+<summary>05. assistant · supervisor_decision <span class='ts'>[2025-10-26T00:35:08.824724+00:00]</span></summary>
+<p>route=end</p>
+<pre>
+{
+  &quot;route&quot;: &quot;end&quot;,
+  &quot;reason&quot;: &quot;La respuesta es clara, correcta y aborda directamente la pregunta, indicando que París no es la capital de Uruguay y proporcionando la capital correcta (Montevideo).&quot;,
+  &quot;tips&quot;: [
+    &quot;Cita fuentes confiables para reforzar la factualidad de la respuesta.&quot;,
+    &quot;Mantén la redacción concisa y evita información adicional innecesaria.&quot;,
+    &quot;Revisa la ortografía y acentuación (p.ej., \&quot;París\&quot;).&quot;,
+    &quot;Si la respuesta se usa en contexto multilingüe, considera traducir correctamente los nombres propios.&quot;,
+    &quot;Incluye una breve explicación del error común (confusión de capitales) para mayor claridad.&quot;
+  ]
+}
+</pre>
+</details>
+<details open>
+<summary>06. system · run_finished <span class='ts'>[2025-10-26T00:35:08.824724+00:00]</span></summary>
+<p>end</p>
+</details>

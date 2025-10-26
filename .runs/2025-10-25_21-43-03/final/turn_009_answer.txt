@@ -1,0 +1,1 @@
+¿Cuál es la complejidad temporal del algoritmo QuickSort en el peor caso y qué técnicas pueden emplearse para reducir dicha complejidad, específicamente mediante la selección estratégica del pivote y la optimización de particiones?

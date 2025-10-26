@@ -1,0 +1,7 @@
+Para crear el archivo HTML que se integre con la lógica de los runs y los eventos, por favor copia y pega aquí:
+
+1. Los archivos clave de la carpeta **coreee** (por ejemplo, módulos, clases o funciones que gestionan los runs y los eventos, exportaciones, etc.).
+2. Ejemplos de los archivos JSON o la estructura de datos que se encuentran en la carpeta **.runs** (cómo están almacenados los runs y sus eventos).
+3. Si existe alguna API interna o función exportada que deba llamarse desde JavaScript para obtener la lista de runs y eventos, incluye su definición o firma.
+
+Con esa información podré diseñar una plantilla HTML autónoma con CSS y JavaScript que cargue y muestre los datos correctamente.

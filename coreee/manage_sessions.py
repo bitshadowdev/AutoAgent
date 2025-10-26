@@ -19,11 +19,13 @@ from pathlib import Path
 from datetime import datetime, timedelta
 from typing import Optional
 
-try:
-    from session_manager import SessionManager
-except ImportError:
-    sys.path.append(str(Path(__file__).parent))
-    from session_manager import SessionManager
+# Agregar el directorio padre al PYTHONPATH para imports absolutos
+_project_root = Path(__file__).parent.parent
+if str(_project_root) not in sys.path:
+    sys.path.insert(0, str(_project_root))
+
+# Import absoluto desde el paquete coreee
+from coreee.session_manager import SessionManager
 
 
 def list_sessions(manager: SessionManager, status: Optional[str] = None, limit: Optional[int] = None):
@@ -95,6 +97,36 @@ def show_session(manager: SessionManager, session_id: str):
     if session.custom_data:
         print(f"\nDatos personalizados:")
         print(json.dumps(session.custom_data, indent=2, ensure_ascii=False))
+        
+        # Resumen amigable de tool_stats
+        ts = session.custom_data.get("tool_stats", {})
+        if ts:
+            print("\n" + "="*60)
+            print("📊 TOP TOOLS POR SCORE")
+            print("="*60)
+            ordered = sorted(ts.items(), key=lambda kv: kv[1].get("score", 0.0), reverse=True)[:5]
+            for name, s in ordered:
+                score = s.get("score", 0)
+                calls = s.get("calls", 0)
+                ok = s.get("ok", 0)
+                errors = s.get("errors", 0)
+                avg_ms = int(s.get("avg_latency_ms") or 0)
+                last_error = s.get("last_error", "N/A")[:50]
+                print(f"\n🔧 {name}")
+                print(f"   Score:         {score:.3f}")
+                print(f"   Llamadas:      {calls} (✓ {ok} / ✗ {errors})")
+                print(f"   Latencia avg:  {avg_ms} ms")
+                if errors > 0:
+                    print(f"   Último error:  {last_error}")
+        
+        # Preferencias del usuario
+        prefs = session.custom_data.get("user_prefs", {})
+        if prefs:
+            print("\n" + "="*60)
+            print("⭐ PREFERENCIAS DEL USUARIO")
+            print("="*60)
+            for key, value in prefs.items():
+                print(f"   {key}: {value}")
 
 
 def delete_session(manager: SessionManager, session_id: str):

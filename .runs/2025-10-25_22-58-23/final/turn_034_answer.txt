@@ -1,0 +1,1 @@
+Se ha reproducido un sonido (beep) de 440 Hz durante 0.5 segundos.

@@ -1,0 +1,5 @@
+Como asistente, no tengo acceso al sistema de archivos de tu computadora, por lo que no puedo leer directamente los directorios 'C:\Users\israe\OneDrive\Escritorio\AutoAgent\coreee' ni 'C:\Users\israe\OneDrive\Escritorio\AutoAgent\.runs'.
+
+Para poder generar el archivo HTML que integre la lógica de los runs y los eventos, necesitaría que me proporciones el contenido relevante de esos archivos (por ejemplo, fragmentos de código, estructuras de datos, plantillas, etc.) o una descripción detallada de la arquitectura y los formatos que utilizan. Con esa información podré crear el HTML y explicar cómo enlazarlo con la lógica existente.
+
+Por favor, comparte los archivos o la información necesaria y con gusto continuaré con la tarea.

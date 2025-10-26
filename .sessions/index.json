@@ -1,0 +1,247 @@
+{
+  "sessions": {
+    "20251025_210621": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251025_210621.json",
+      "task": "quiero que me muestres las ultimas noticias de inteligencia artificial, aqui tienes una api key de serpapi y puedes usar python: c7f9ec50307100bea7733ae460878f220dd13b6341bd6b6b225eab62a8001878",
+      "created_at": "2025-10-26T00:08:17.258387Z",
+      "updated_at": "2025-10-26T00:08:35.907203Z",
+      "status": "active",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251025_211328": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251025_211328.json",
+      "task": "haz un scrap de quotes to scrap y guardalo en un json",
+      "created_at": "2025-10-26T00:13:42.925071Z",
+      "updated_at": "2025-10-26T00:13:42.925071Z",
+      "status": "active",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251025_211401": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251025_211401.json",
+      "task": "quiero que me muestres las ultimas noticias de inteligencia artificial, aqui tienes una api key de serpapi y puedes usar python: c7f9ec50307100bea7733ae460878f220dd13b6341bd6b6b225eab62a8001878",
+      "created_at": "2025-10-26T00:14:14.386091Z",
+      "updated_at": "2025-10-26T00:14:58.076413Z",
+      "status": "completed",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251025_212949": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251025_212949.json",
+      "task": "crea un agente nuevo que sirva para verificar factualidad de las respuestas, y que revise siempre antes de finalizar las iteraciones la factualidad",
+      "created_at": "2025-10-26T00:30:31.058358Z",
+      "updated_at": "2025-10-26T00:32:05.024811Z",
+      "status": "active",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251025_213354": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251025_213354.json",
+      "task": "haz un scraping de books to scrap y guardalo en un html",
+      "created_at": "2025-10-26T00:34:14.655191Z",
+      "updated_at": "2025-10-26T01:13:51.037897Z",
+      "status": "active",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251025_221900": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251025_221900.json",
+      "task": "haz un scraping de books to scrap y guardalo en un html",
+      "created_at": "2025-10-26T01:19:32.326800Z",
+      "updated_at": "2025-10-26T01:20:47.642407Z",
+      "status": "active",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251025_222427": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251025_222427.json",
+      "task": "haz un scraping de books to scrap y guardalo en un html",
+      "created_at": "2025-10-26T01:24:51.324601Z",
+      "updated_at": "2025-10-26T01:24:51.324601Z",
+      "status": "completed",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251025_222530": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251025_222530.json",
+      "task": "leer los archivos de tu misma arquitectura están aqui C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\coreee, y haz un archivo html de un frontend para ti mismo, la idea es que se integre con la logica de los runs y los eventos C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.runs tienes todos mis permisos para leer los archivos con python",
+      "created_at": "2025-10-26T01:25:47.682259Z",
+      "updated_at": "2025-10-26T01:25:47.682259Z",
+      "status": "completed",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251025_222813": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251025_222813.json",
+      "task": "haz un agente factual y hazle una pregunta de programación que no se haya visto hasta hoy o que no tengan registros, y que intente responder",
+      "created_at": "2025-10-26T01:29:38.556105Z",
+      "updated_at": "2025-10-26T01:29:38.556105Z",
+      "status": "completed",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251025_223225": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251025_223225.json",
+      "task": "busca el rut de lucas antonio mella vasquez es de chile",
+      "created_at": "2025-10-26T01:33:13.750910Z",
+      "updated_at": "2025-10-26T01:33:13.750910Z",
+      "status": "completed",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251025_223336": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251025_223336.json",
+      "task": "quien es israel exequiel huentecura, te doy una api key de serpapi: c7f9ec50307100bea7733ae460878f220dd13b6341bd6b6b225eab62a8001878 por si la necesitas",
+      "created_at": "2025-10-26T01:34:23.161648Z",
+      "updated_at": "2025-10-26T01:37:01.394237Z",
+      "status": "active",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251025_223738": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251025_223738.json",
+      "task": "dime lugares que hayan al rededor del contanera center para comer ramen cerca de general holley,providencia, santiago de chile",
+      "created_at": "2025-10-26T01:38:53.646150Z",
+      "updated_at": "2025-10-26T01:38:53.646150Z",
+      "status": "completed",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251025_224059": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251025_224059.json",
+      "task": "con selenium entra a google la dirección de casona nueva, queda en santiago de chile",
+      "created_at": "2025-10-26T01:42:53.185134Z",
+      "updated_at": "2025-10-26T01:46:53.240094Z",
+      "status": "active",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251025_224716": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251025_224716.json",
+      "task": "buscame la dirección de la casona nueva, queda en santiago de chile",
+      "created_at": "2025-10-26T01:48:10.270449Z",
+      "updated_at": "2025-10-26T01:49:45.853034Z",
+      "status": "active",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251025_225045": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251025_225045.json",
+      "task": "ejecuta un código que haga un sonido en python",
+      "created_at": "2025-10-26T01:51:15.152901Z",
+      "updated_at": "2025-10-26T01:58:46.155084Z",
+      "status": "completed",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251025_225905": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251025_225905.json",
+      "task": "ejecuta un código que haga un sonido en python",
+      "created_at": "2025-10-26T01:59:25.238414Z",
+      "updated_at": "2025-10-26T01:59:25.238414Z",
+      "status": "completed",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251025_225933": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251025_225933.json",
+      "task": "haz como una alarma de un auto con codigo de python y ejecutala",
+      "created_at": "2025-10-26T01:59:58.567781Z",
+      "updated_at": "2025-10-26T02:01:17.036438Z",
+      "status": "completed",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251025_230120": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251025_230120.json",
+      "task": "haz un código con python que ejecute un sonido, ejecutale",
+      "created_at": "2025-10-26T02:01:42.794101Z",
+      "updated_at": "2025-10-26T02:01:42.794101Z",
+      "status": "completed",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251025_230150": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251025_230150.json",
+      "task": "haz un sonido con python, ejecutale",
+      "created_at": "2025-10-26T02:02:09.515892Z",
+      "updated_at": "2025-10-26T02:02:09.515892Z",
+      "status": "completed",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251025_230619": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251025_230619.json",
+      "task": "sk_1f35aacb9aa9ab2dd436e6b8c9943352916cc8da5768154a esta api key es de elevenlabs, haz algo con ella y emite algun sonido",
+      "created_at": "2025-10-26T02:06:54.756540Z",
+      "updated_at": "2025-10-26T02:06:54.756540Z",
+      "status": "completed",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251025_230724": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251025_230724.json",
+      "task": "sk_1f35aacb9aa9ab2dd436e6b8c9943352916cc8da5768154a esta es mi api key de elevenlabs, puedes hace un hola mundo pero con voz y que suene ahora, ejecutalo",
+      "created_at": "2025-10-26T02:08:03.074676Z",
+      "updated_at": "2025-10-26T02:08:03.074676Z",
+      "status": "completed",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251025_230828": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251025_230828.json",
+      "task": "sk_1f35aacb9aa9ab2dd436e6b8c9943352916cc8da5768154a esta es mi api key de elevenlabs, puedes hace un hola mundo pero con voz y que suene ahora, ejecutalo, debes hacer que suene ahora",
+      "created_at": "2025-10-26T02:09:02.079643Z",
+      "updated_at": "2025-10-26T02:09:02.079643Z",
+      "status": "completed",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251025_231118": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251025_231118.json",
+      "task": "sk_1f35aacb9aa9ab2dd436e6b8c9943352916cc8da5768154a esta es mi api key de elevenlabs, puedes hace un hola mundo pero con voz y que suene ahora, ejecutalo, debes hacer que suene ahora, ese audio en base64 debes decodificar y reproducir esa respuesta en base64",
+      "created_at": "2025-10-26T02:12:41.578866Z",
+      "updated_at": "2025-10-26T02:13:55.719330Z",
+      "status": "active",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251025_232331": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251025_232331.json",
+      "task": "Escribe tu pregunta/tarea: esta es una api key de  elevenlabs, es mia, quiero que hagas un hola mundo de audio y reproduzcas eso en el computador:sk_1f35aacb9aa9ab2dd436e6b8c9943352916cc8da5768154a",
+      "created_at": "2025-10-26T02:23:59.494876Z",
+      "updated_at": "2025-10-26T02:23:59.494876Z",
+      "status": "completed",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251025_232444": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251025_232444.json",
+      "task": "esta es una api key de  elevenlabs, es mia, quiero que hagas un hola mundo de audio y reproduzcas eso en el computador:sk_1f35aacb9aa9ab2dd436e6b8c9943352916cc8da5768154a",
+      "created_at": "2025-10-26T02:25:02.237650Z",
+      "updated_at": "2025-10-26T02:25:02.237650Z",
+      "status": "active",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251025_232515": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251025_232515.json",
+      "task": "esta es una api key de  elevenlabs, es mia, quiero que hagas un hola mundo de audio y reproduzcas eso en el computador:sk_1f35aacb9aa9ab2dd436e6b8c9943352916cc8da5768154a",
+      "created_at": "2025-10-26T02:25:32.373956Z",
+      "updated_at": "2025-10-26T02:25:32.373956Z",
+      "status": "active",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251025_232548": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251025_232548.json",
+      "task": "esta es una api key de  elevenlabs, es mia, quiero que hagas un poema e audio y reproduzcas eso en el computador:sk_1f35aacb9aa9ab2dd436e6b8c9943352916cc8da5768154a  sin pasar por un reproductor, reproduce con python",
+      "created_at": "2025-10-26T02:26:08.450841Z",
+      "updated_at": "2025-10-26T02:48:07.478050Z",
+      "status": "active",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    }
+  }
+}

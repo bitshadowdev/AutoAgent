@@ -1,0 +1,77 @@
+```python
+import time, random, sys
+
+def run_alarm(duration, trigger_chance):
+    """Simula una alarma de coche.
+    
+    Parámetros:
+        duration (int o float): número total de segundos (o unidades) que dura la simulación.
+        trigger_chance (float): probabilidad entre 0 y 1 de que la alarma cambie de estado en cada paso.
+    """
+    # ---- validaciones ----
+    if not isinstance(duration, (int, float)):
+        print("Error: duration must be numeric")
+        return
+    if not isinstance(trigger_chance, (int, float)):
+        print("Error: trigger_chance must be numeric")
+        return
+    if duration < 0:
+        print("Error: duration cannot be negative")
+        return
+    if not (0 <= trigger_chance <= 1):
+        print("Error: trigger_chance must be between 0 and 1")
+        return
+    
+    print(f"Simulation started: {duration}s, trigger chance {trigger_chance}")
+    alarm_active = False
+    try:
+        for t in range(1, int(duration) + 1):
+            # decidir si se activa o desactiva la alarma
+            if not alarm_active and random.random() < trigger_chance:
+                alarm_active = True
+                print(f"[t+{t}s] Alarm ACTIVATED")
+            elif alarm_active and random.random() < trigger_chance:
+                alarm_active = False
+                print(f"[t+{t}s] Alarm DEACTIVATED")
+            else:
+                state = "ACTIVE" if alarm_active else "INACTIVE"
+                print(f"[t+{t}s] Alarm {state}")
+            # usar 0.1 s para que la demo sea rápida; en uso real sería 1 s
+            time.sleep(0.1)
+    except KeyboardInterrupt:
+        print("Simulation interrupted by user.")
+        sys.exit(0)
+    print("Simulation finished")
+
+if __name__ == "__main__":
+    try:
+        # ejemplo: 5 pasos, 30 % de probabilidad de cambio en cada paso
+        run_alarm(5, 0.3)
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+```
+
+**Explicación del algoritmo**
+
+1. **Validación de parámetros** – se comprueba que `duration` y `trigger_chance` sean numéricos, que `duration` no sea negativo y que la probabilidad esté en el rango `[0, 1]`.
+2. **Bucle de simulación** – se itera desde 1 hasta `duration` (convertido a entero). En cada iteración:
+   - Si la alarma está *inactiva* y `random.random()` es menor que `trigger_chance`, la alarma se *activa*.
+   - Si la alarma está *activa* y se cumple la misma condición, la alarma se *desactiva*.
+   - En caso contrario, el estado se mantiene.
+   - Se imprime el estado con la marca temporal `[t+Ns]`.
+3. **Retardo** – `time.sleep(0.1)` se usa sólo para que la salida sea visible sin ralentizar demasiado la ejecución (en una aplicación real se usaría `1` segundo).
+4. **Manejo de interrupciones** – se captura `KeyboardInterrupt` para terminar limpiamente.
+5. **Bloque `if __name__ == "__main__"`** – permite ejecutar el script directamente o importarlo sin que se inicie la simulación.
+
+Los parámetros `duration` y `trigger_chance` son fáciles de ajustar: aumentar `duration` prolonga la simulación; aumentar `trigger_chance` hace que la alarma cambie de estado con más frecuencia.
+
+**Salida de la ejecución (ejemplo)**
+```
+Simulation started: 5s, trigger chance 0.3
+[t+1s] Alarm ACTIVATED
+[t+2s] Alarm ACTIVE
+[t+3s] Alarm ACTIVE
+[t+4s] Alarm ACTIVE
+[t+5s] Alarm ACTIVE
+Simulation finished
+```

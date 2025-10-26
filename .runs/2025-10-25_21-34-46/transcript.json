@@ -1,0 +1,10 @@
+[
+  {
+    "role": "assistant",
+    "content": "[Coder] Se crea un agente especializado en verificar la factualidad de respuestas antes de concluir cualquier proceso.\n\nAgente creado: verificador_factual\nRol: Verificador de hechos y factualidad\nCapacidades: verificar_factualidad, citar_fuentes_confiables, detectar_inexactitudes_y_misinterpretaciones, asignar_nivel_de_confianza"
+  },
+  {
+    "role": "assistant",
+    "content": "[Coder] Respuesta factual\n\nPropuesta de respuesta:\nNo, París es la capital de Francia. La capital de Uruguay es Montevideo."
+  }
+]
