@@ -9,3 +9,11 @@ wheels/
 # Virtual environments
 .venv
 venv
+
+# Persistent data directories
+.permanent_tools/
+.sessions/
+.runs/
+
+# Environment variables
+.env

@@ -1,31 +1,45 @@
-def scrape_quotes(args):
-    import json, os, sys, subprocess, base64, time
-    # Instalar dependencias si es necesario
+import requests
+import json
+import os
+from bs4 import BeautifulSoup
+
+def scrape_quotes(args: dict) -> dict:
+    """
+    Scrapea todas las citas del sitio http://quotes.toscrape.com (todas sus páginas) y las guarda en un archivo JSON.
+    Argumentos opcionales (en args):
+        - output_path (str): ruta donde guardar el JSON. Si no se indica, se usa './quotes.json'.
+    Retorna un dict con:
+        - ok (bool): True si todo salió bien.
+        - path (str): ruta al archivo JSON generado (si ok).
+        - count (int): número de citas obtenidas.
+        - error (str, opcional): mensaje de error en caso de fallo.
+    """
     try:
-        from selenium import webdriver
-        from selenium.webdriver.common.by import By
-        from selenium.webdriver.chrome.options import Options
-        from webdriver_manager.chrome import ChromeDriverManager
-    except Exception:
-        subprocess.check_call([sys.executable, '-m', 'pip', 'install', '--quiet', 'selenium', 'webdriver-manager'])
-        from selenium import webdriver
-        from selenium.webdriver.common.by import By
-        from selenium.webdriver.chrome.options import Options
-        from webdriver_manager.chrome import ChromeDriverManager
-    url = args.get('url', 'http://quotes.toscrape.com')
-    # Configurar Chrome en modo headless
-    chrome_options = Options()
-    chrome_options.add_argument('--headless')
-    chrome_options.add_argument('--no-sandbox')
-    chrome_options.add_argument('--disable-dev-shm-usage')
-    driver = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options)
-    driver.get(url)
-    time.sleep(1)  # dar tiempo a carga
-    quotes_elements = driver.find_elements(By.CSS_SELECTOR, "div.quote")
-    results = []
-    for el in quotes_elements:
-        text = el.find_element(By.CSS_SELECTOR, "span.text").text.strip()
-        author = el.find_element(By.CSS_SELECTOR, "small.author").text.strip()
-        results.append({"text": text, "author": author})
-    driver.quit()
-    return {"quotes": results}
+        base_url = "http://quotes.toscrape.com"
+        url = base_url
+        quotes = []
+        while True:
+            resp = requests.get(url, timeout=10)
+            resp.raise_for_status()
+            soup = BeautifulSoup(resp.text, "html.parser")
+            quote_blocks = soup.select("div.quote")
+            for block in quote_blocks:
+                text = block.select_one("span.text").get_text(strip=True)
+                author = block.select_one("small.author").get_text(strip=True)
+                tags = [tag.get_text(strip=True) for tag in block.select("div.tags a.tag")]
+                quotes.append({"text": text, "author": author, "tags": tags})
+            # buscar enlace a la siguiente página
+            next_btn = soup.select_one("li.next a")
+            if not next_btn:
+                break
+            next_href = next_btn["href"]
+            url = base_url + next_href
+        # determinar ruta de salida
+        output_path = args.get("output_path", "quotes.json")
+        # asegurarse el directorio exista
+        os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
+        with open(output_path, "w", encoding="utf-8") as f:
+            json.dump(quotes, f, ensure_ascii=False, indent=2)
+        return {"ok": True, "path": os.path.abspath(output_path), "count": len(quotes)}
+    except Exception as e:
+        return {"ok": False, "error": str(e)}

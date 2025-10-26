@@ -50,6 +50,8 @@ except Exception:
 
 # Nuevo: recorder para timeline
 from timeline_recorder import Recorder
+# Nuevo: gestor de sesiones persistentes
+from session_manager import SessionManager
 
 # ===============================
 #  Utilidades
@@ -265,10 +267,33 @@ class ToolRegistry:
             raise KeyError(f"Herramienta desconocida: {name}")
         try:
             return self._tools[name](args)
-        except Exception:
+        except NameError as e:
+            # Error común: import faltante
+            error_str = str(e)
             return {
                 "ok": False,
-                "error": "Excepción en tool",
+                "error": f"NameError: {error_str}",
+                "suggestion": "Probablemente falta un 'import' al inicio del código. Agrégalo y vuelve a intentar.",
+                "traceback": traceback.format_exc(limit=3)
+            }
+        except ImportError as e:
+            return {
+                "ok": False,
+                "error": f"ImportError: {str(e)}",
+                "suggestion": "El módulo no está instalado. Usa subprocess.run(['pip', 'install', 'nombre_modulo']).",
+                "traceback": traceback.format_exc(limit=3)
+            }
+        except KeyError as e:
+            return {
+                "ok": False,
+                "error": f"KeyError: {str(e)}",
+                "suggestion": "Falta una clave esperada en el diccionario. Verifica la estructura de datos.",
+                "traceback": traceback.format_exc(limit=3)
+            }
+        except Exception as e:
+            return {
+                "ok": False,
+                "error": f"{type(e).__name__}: {str(e)}",
                 "traceback": traceback.format_exc(limit=5)
             }
 
@@ -289,10 +314,19 @@ Puedes:
 
 Reglas de herramienta (MODO ABIERTO):
 - **Se permiten `import`**, dunders, red (HTTP), sistema de archivos, uso de `subprocess` (p. ej. `pip`).
+- **IMPORTANTE: SIEMPRE incluye TODOS los imports necesarios al inicio del código**.
+- Si usas `requests`, `json`, `re`, etc., debes importarlos explícitamente.
 - La función debe llamarse exactamente como 'tool.name'.
 - Firma: `def <name>(args: dict) -> (dict|list|str|int|float|bool)`.
 - Devuelve **solo valores JSON-serializables**. Si lees binarios, devuélvelos codificados (p. ej. base64) o a disco y retorna la ruta.
 - Si haces scraping, intenta respetar robots.txt y Términos del sitio.
+- **MANEJO DE ERRORES**: Siempre usa try/except para capturar excepciones y devuelve dict con 'ok' y 'error' cuando falle.
+
+**CORRECCIÓN DE ERRORES**:
+- Si una herramienta falló, DEBES corregirla creando una nueva versión con el MISMO nombre.
+- Lee cuidadosamente el error reportado y corrígelo específicamente.
+- Si falta un import, agrégalo. Si hay un bug lógico, corrígelo.
+- NO ignores los errores previos, apréndelos y corrígelos.
 
 Salida: SOLO JSON válido, uno de:
 
@@ -340,11 +374,16 @@ Evalúa si la salida satisface la tarea. Devuelve SOLO JSON:
 Criterio:
 - Si hay una respuesta clara/útil -> end.
 - Si falta completar/mejorar -> coder.
+- **Si hay un ERROR de ejecución -> coder con tips específicos de corrección**.
 
 Guía para 'tips':
-- Sé específico y verificable (p.ej., “agrega pruebas para X”, “maneja error Y”, “cubre caso límite Z”).
+- Sé específico y verificable (p.ej., "agrega pruebas para X", "maneja error Y", "cubre caso límite Z").
+- **CRÍTICO para errores**: Si ves un error como "name 'X' is not defined", el primer tip debe ser "Agrega 'import X' al inicio del código".
+- Si hay un error de sintaxis, indica exactamente qué corregir.
+- Si falta manejo de excepciones, indica qué excepciones capturar.
 - Incluye, cuando aplique: siguiente acción, cómo validarla, y un criterio de salida.
-- Enfoca en brechas observables: pruebas, manejo de errores, casos límite, rendimiento, seguridad, UX, fuentes/citas, estructura del código.
+- Enfoca en brechas observables: imports faltantes, pruebas, manejo de errores, casos límite, rendimiento, seguridad, UX, fuentes/citas, estructura del código.
+- **Prioriza la corrección de errores sobre nuevas features**.
 """
 
 
@@ -385,12 +424,15 @@ class Supervisor:
 #  Orquestador
 # ===============================
 class MiniAgentSystem:
-    def __init__(self, llm: CloudflareLLMClient, recorder: Optional[Recorder] = None):
+    def __init__(self, llm: CloudflareLLMClient, recorder: Optional[Recorder] = None, session_manager: Optional[SessionManager] = None):
         self.llm = llm
         self.coder = CoderAgent(llm)
         self.supervisor = Supervisor(llm)
         self.tools = ToolRegistry()  # Carga persistentes en el __init__
         self.recorder = recorder
+        self.session_manager = session_manager or SessionManager()
+        self.current_session_id: Optional[str] = None
+        self.tools_used_in_session: List[str] = []
 
     def _append(self, transcript: List[Dict[str, str]], role: str, content: str) -> None:
         transcript.append({"role": role, "content": content})
@@ -406,10 +448,33 @@ class MiniAgentSystem:
         max_turns: int = 5,
         stream: bool = False,
         save_transcript_path: Optional[str] = None,
+        session_id: Optional[str] = None,
+        resume_session: bool = False,
     ) -> Dict[str, Any]:
-        transcript: List[Dict[str, str]] = []
-        turn = 0
-        if self.recorder:
+        # Cargar sesión anterior si se solicita
+        if resume_session and session_id:
+            loaded = self.session_manager.load_session(session_id)
+            if loaded:
+                transcript = loaded.transcript.copy()
+                self.current_session_id = session_id
+                self.tools_used_in_session = loaded.tools_used.copy()
+                if stream:
+                    print(f"[SISTEMA] Reanudando sesión '{session_id}' con {len(transcript)} mensajes previos.")
+                if self.recorder:
+                    self.recorder.emit(turn=0, role="system", etype="session_resumed", summary=f"session_id={session_id}", data={"transcript_length": len(transcript)})
+            else:
+                if stream:
+                    print(f"[SISTEMA] No se encontró la sesión '{session_id}'. Iniciando nueva sesión.")
+                transcript = []
+        else:
+            transcript = []
+        
+        # Crear o actualizar sesión
+        if session_id:
+            self.current_session_id = session_id
+        
+        turn = len(transcript)  # Continuar desde el último turno
+        if self.recorder and not resume_session:
             self.recorder.emit(turn=turn, role="system", etype="run_started", summary=f"task={task}", data={"max_turns": max_turns})
 
         for _ in range(max_turns):
@@ -451,24 +516,54 @@ class MiniAgentSystem:
                     tool = coder_out.get('tool', {}) or {}
                     tname = tool.get('name') or name
                     code = str(tool.get('code', ''))
-                    if not self.tools.has(tname):
-                        if self.recorder:
-                            code_path = self.recorder.write_blob(f"tools_session/turn_{turn:03d}_{tname}.py", code)
-                            self.recorder.emit(turn=turn, role="assistant", etype="tool_create", summary=f"def {tname}(args)", data={"code_path": code_path, "chars": len(code)})
-                        # Registrar en memoria y **persistir**
-                        self.tools.add_from_code(tname, code)
-                        if self.recorder:
-                            self.recorder.emit(turn=turn, role="assistant", etype="tool_registered", data={"name": tname, "persistent_dir": str(self.tools.store_dir)})
+                    
+                    # Detectar si es creación nueva o actualización
+                    is_update = self.tools.has(tname)
+                    action = "actualizada" if is_update else "creada"
+                    event_type = "tool_update" if is_update else "tool_create"
+                    
+                    if self.recorder:
+                        code_path = self.recorder.write_blob(f"tools_session/turn_{turn:03d}_{tname}.py", code)
+                        self.recorder.emit(turn=turn, role="assistant", etype=event_type, summary=f"def {tname}(args) - {action}", data={"code_path": code_path, "chars": len(code), "is_update": is_update})
+                    
+                    # Registrar en memoria y **persistir** (permite sobrescritura)
+                    self.tools.add_from_code(tname, code)
+                    
+                    if self.recorder:
+                        self.recorder.emit(turn=turn, role="assistant", etype="tool_registered", data={"name": tname, "persistent_dir": str(self.tools.store_dir), "action": action})
+                    
+                    # Mostrar mensaje informativo si es actualización
+                    if is_update and stream:
+                        print(f"\n[⟳ HERRAMIENTA ACTUALIZADA] {tname} ha sido corregida/mejorada.")
+                    
                     name = tname
 
                 # Ejecutar herramienta
                 if self.recorder:
                     self.recorder.emit(turn=turn, role="assistant", etype="tool_call", summary=f"{name}(args)", data={"args": args})
                 result = self.tools.call(name, args)
+                # Rastrear herramientas usadas
+                if name not in self.tools_used_in_session:
+                    self.tools_used_in_session.append(name)
+                
+                # Detectar si hay error en el resultado
+                error_msg = ""
+                if isinstance(result, dict):
+                    if result.get("ok") is False:
+                        error_detail = result.get('error', 'desconocido')
+                        suggestion = result.get('suggestion', '')
+                        traceback_info = result.get('traceback', 'N/A')
+                        error_msg = f"\n\n⚠️ ERROR EN HERRAMIENTA: {error_detail}"
+                        if suggestion:
+                            error_msg += f"\n💡 Sugerencia: {suggestion}"
+                        error_msg += f"\nTraceback: {traceback_info}"
+                    elif "error" in result and result["error"]:
+                        error_msg = f"\n\n⚠️ ERROR EN HERRAMIENTA: {result['error']}"
+                
                 self._append(
                     transcript,
                     'assistant',
-                    f"[Coder] {msg}\n\nHerramienta usada: {name}\nArgs: {args}\nResultado: {result}"
+                    f"[Coder] {msg}\n\nHerramienta usada: {name}\nArgs: {args}\nResultado: {result}{error_msg}"
                 )
                 if self.recorder:
                     if isinstance(result, dict) and result.get("ok") is False:
@@ -495,6 +590,15 @@ class MiniAgentSystem:
             if route == 'end':
                 last = next((m for m in reversed(transcript) if m['role'] == 'assistant'), None)
                 final = last['content'] if last else 'Tarea finalizada.'
+                # Guardar sesión persistente
+                if self.current_session_id:
+                    self.session_manager.save_session(
+                        session_id=self.current_session_id,
+                        transcript=transcript,
+                        metadata={"task": task, "total_turns": turn, "model": self.coder.model},
+                        tools_used=self.tools_used_in_session,
+                        status="completed"
+                    )
                 # Guardar transcript si se pidió
                 if save_transcript_path:
                     try:
@@ -505,16 +609,42 @@ class MiniAgentSystem:
                         pass
                 if self.recorder:
                     self.recorder.emit(turn=turn, role="system", etype="run_finished", summary="end")
-                return {"final": final, "transcript": transcript}
+                return {"final": final, "transcript": transcript, "session_id": self.current_session_id}
 
-            # Feedback genérico para otra vuelta
-            self._append(transcript, 'user', '[Supervisor] Continúa, falta completar o mejorar la respuesta.')
+            # Feedback del supervisor con tips
+            reason = decision.get('reason', 'Continúa trabajando')
+            tips = decision.get('tips', [])
+            if tips:
+                tips_text = "\n".join(f"  {i+1}. {tip}" for i, tip in enumerate(tips[:6]))
+                feedback = f"[Supervisor] {reason}\n\nAcciones requeridas:\n{tips_text}\n\n🔄 Por favor, corrige los errores y vuelve a intentar."
+            else:
+                feedback = f"[Supervisor] {reason}\n\n🔄 Continúa mejorando la solución."
+            self._append(transcript, 'user', feedback)
             if self.recorder:
                 self.recorder.emit(turn=turn, role="assistant", etype="iteration_continue")
             if stream: self._print_turn(transcript[-1])
+            
+            # Guardar progreso de sesión cada turno
+            if self.current_session_id:
+                self.session_manager.save_session(
+                    session_id=self.current_session_id,
+                    transcript=transcript,
+                    metadata={"task": task, "total_turns": turn, "model": self.coder.model},
+                    tools_used=self.tools_used_in_session,
+                    status="active"
+                )
 
         last = next((m for m in reversed(transcript) if m['role'] == 'assistant'), None)
         final = last['content'] if last else 'No se pudo completar en los turnos permitidos.'
+        # Guardar sesión (estado: activa porque no se completó)
+        if self.current_session_id:
+            self.session_manager.save_session(
+                session_id=self.current_session_id,
+                transcript=transcript,
+                metadata={"task": task, "total_turns": turn, "model": self.coder.model},
+                tools_used=self.tools_used_in_session,
+                status="active"
+            )
         if save_transcript_path:
             try:
                 with open(save_transcript_path, "w", encoding="utf-8") as f:
@@ -522,7 +652,7 @@ class MiniAgentSystem:
                     _json.dump(transcript, f, ensure_ascii=False, indent=2)
             except Exception as _:
                 pass
-        return {"final": final, "transcript": transcript}
+        return {"final": final, "transcript": transcript, "session_id": self.current_session_id}
 
 
 # ===============================
@@ -533,10 +663,16 @@ if __name__ == '__main__':
     # --- CLI extendido ---
     parser = argparse.ArgumentParser(description='Mini sistema de agentes (supervisor + coder) con tools persistentes.')
     parser.add_argument('-q', '--question', '--task', dest='task', help='Tarea o pregunta a resolver.')
-    parser.add_argument('-m', '--max-turns', dest='max_turns', type=int, default=5, help='Máximo de turnos.')
+    parser.add_argument('-m', '--max-turns', dest='max_turns', type=int, default=10, help='Máximo de turnos (default: 10 para permitir correcciones).')
     parser.add_argument('--log-dir', dest='log_dir', default='.runs', help='Directorio base para logs/timeline.')
     parser.add_argument('--tools-list', action='store_true', help='Listar tools persistentes y salir.')
     parser.add_argument('--tools-dir', dest='tools_dir', default=os.environ.get('TOOL_STORE_DIR', '.permanent_tools'), help='Directorio de tools persistentes.')
+    # Nuevos argumentos para sesiones
+    parser.add_argument('--session-id', dest='session_id', help='ID de la sesión (auto-generado si no se especifica).')
+    parser.add_argument('--resume', dest='resume_session', action='store_true', help='Reanudar sesión anterior especificada con --session-id.')
+    parser.add_argument('--sessions-list', dest='sessions_list', action='store_true', help='Listar sesiones guardadas y salir.')
+    parser.add_argument('--sessions-dir', dest='sessions_dir', default='.sessions', help='Directorio de sesiones persistentes.')
+    parser.add_argument('--delete-session', dest='delete_session', help='Eliminar una sesión por ID.')
     args = parser.parse_args()
 
     # Definir carpeta de sesión
@@ -545,15 +681,46 @@ if __name__ == '__main__':
 
     # Respetar --tools-dir
     os.environ['TOOL_STORE_DIR'] = args.tools_dir
+    
+    # Crear gestor de sesiones
+    session_mgr = SessionManager(args.sessions_dir)
 
-    system = MiniAgentSystem(llm, recorder=recorder)
+    system = MiniAgentSystem(llm, recorder=recorder, session_manager=session_mgr)
 
+    # Comando: listar tools
     if args.tools_list:
         print("Tools persistentes en", system.tools.store_dir)
         for name in system.tools.list():
             print(" -", name)
         raise SystemExit(0)
+    
+    # Comando: listar sesiones
+    if args.sessions_list:
+        print(f"Sesiones guardadas en {session_mgr.sessions_dir}:")
+        sessions = session_mgr.list_sessions()
+        if not sessions:
+            print("  (ninguna sesión guardada)")
+        else:
+            for s in sessions:
+                status_icon = "✓" if s["status"] == "completed" else "○"
+                print(f"  {status_icon} {s['session_id']:30s} | {s.get('task', '')[:50]:50s} | {s['status']:10s} | {s.get('updated_at', '')}")
+        raise SystemExit(0)
+    
+    # Comando: eliminar sesión
+    if args.delete_session:
+        if session_mgr.delete_session(args.delete_session):
+            print(f"Sesión '{args.delete_session}' eliminada.")
+        else:
+            print(f"No se encontró la sesión '{args.delete_session}'.")
+        raise SystemExit(0)
 
+    # Generar o usar session_id
+    if args.session_id:
+        session_id = args.session_id
+    else:
+        # Auto-generar ID basado en timestamp
+        session_id = datetime.now().strftime('%Y%m%d_%H%M%S')
+    
     tarea = (
         args.task
         or os.environ.get('AGENT_TASK')
@@ -562,10 +729,19 @@ if __name__ == '__main__':
     )
 
     # Guardamos también el transcript en la sesión
-    resultado = system.run(tarea, max_turns=args.max_turns, save_transcript_path=str(session_dir / 'transcript.json'))
+    resultado = system.run(
+        tarea, 
+        max_turns=args.max_turns, 
+        save_transcript_path=str(session_dir / 'transcript.json'),
+        session_id=session_id,
+        resume_session=args.resume_session
+    )
 
     # Compilamos timeline legible
     md_path = recorder.save_markdown(str(session_dir / 'timeline.md'))
     html_path = recorder.save_html(str(session_dir / 'timeline.html'))
-    print(f"\n=== RESPUESTA FINAL ===\n{resultado}\n")
+    print(f"\n=== RESPUESTA FINAL ===\n{resultado.get('final', 'Sin respuesta')}\n")
+    print(f"\nSession ID: {resultado.get('session_id', 'N/A')}")
     print(f"Archivos de sesión:\n - {session_dir / 'events.jsonl'}\n - {md_path}\n - {html_path}\n - {session_dir / 'transcript.json'}")
+    print(f"\nSesión persistente guardada en: {session_mgr.sessions_dir}")
+    print(f"Para reanudar esta sesión, usa: --session-id {session_id} --resume")
