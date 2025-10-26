@@ -31,7 +31,7 @@ Sistema de agentes inteligentes (Supervisor + Coder) con **persistencia completa
 - Ejemplos: `data_analyst`, `ux_designer`, `security_auditor`
 - Ver guías: [AGENTES_DINAMICOS.md](AGENTES_DINAMICOS.md) y [AGENTES_POR_SESION.md](AGENTES_POR_SESION.md)
 
-### ✅ Integración MCP (Model Context Protocol) 🔌 **NUEVO**
+### ✅ Integración MCP (Model Context Protocol) 🔌
 - **Conecta servidores MCP externos** para expandir capacidades
 - **Descubrimiento automático** de herramientas MCP al inicio
 - **Sin cambios en el flujo**: tools MCP funcionan como herramientas locales
@@ -39,6 +39,16 @@ Sistema de agentes inteligentes (Supervisor + Coder) con **persistencia completa
 - **Telemetría completa**: métricas, errores y scoring integrados
 - **Servidor demo incluido** con 5 herramientas de ejemplo
 - Ver guía completa en [docs/MCP_INTEGRATION.md](docs/MCP_INTEGRATION.md) y [QUICK_START_MCP.md](QUICK_START_MCP.md)
+
+### ✅ Dashboard en Tiempo Real 📊 **NUEVO**
+- **Visualización completa** de todos los eventos del sistema
+- **Interfaz Streamlit** con actualización en tiempo real
+- **Timeline completo**: mensajes, herramientas, agentes, errores
+- **Código de herramientas** con syntax highlighting
+- **Estadísticas y gráficos** de actividad
+- **Inspector de eventos** con datos JSON completos
+- **Filtros avanzados** por rol, tipo, sesión
+- Ver guía completa en [REALTIME_DASHBOARD.md](REALTIME_DASHBOARD.md)
 
 ### ✅ Auto-corrección con Retry Inteligente
 - **Detección automática de errores** con sugerencias específicas
@@ -113,6 +123,36 @@ python sistema_agentes_supervisor_coder.py -q "crear una calculadora" --session-
 ```bash
 python sistema_agentes_supervisor_coder.py --session-id mi_calculadora --resume
 ```
+
+## 📊 Dashboard en Tiempo Real
+
+### Ejecutar con visualización en tiempo real
+
+```bash
+# El dashboard se abre automáticamente en http://localhost:8501
+python run_with_dashboard.py -q "tu tarea aquí"
+```
+
+### Solo iniciar el dashboard (para ver sesiones antiguas)
+
+```bash
+python run_with_dashboard.py --dashboard-only
+
+# Luego en el dashboard, cargar archivo:
+# Sidebar → "Cargar desde archivo" → .runs/YYYY-MM-DD_HH-MM-SS/events.jsonl
+```
+
+### Modo manual (dos terminales)
+
+```bash
+# Terminal 1: Dashboard
+streamlit run dashboard_streamlit.py
+
+# Terminal 2: Sistema
+python coreee/sistema_agentes_supervisor_coder.py -q "tu tarea"
+```
+
+Ver guía completa en [REALTIME_DASHBOARD.md](REALTIME_DASHBOARD.md)
 
 ## 📊 Gestión de Sesiones
 

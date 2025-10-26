@@ -47,7 +47,7 @@ if str(_project_root) not in sys.path:
 # ===============================
 # Imports absolutos desde el paquete coreee
 from coreee.llm_client import CloudflareLLMClient
-from coreee.timeline_recorder import Recorder
+from coreee.enhanced_recorder import EnhancedRecorder
 from coreee.session_manager import SessionManager
 from coreee.agent_registry import AgentRegistry
 
@@ -832,6 +832,9 @@ class MiniAgentSystem:
         
         turn = len(transcript)  # Continuar desde el último turno
         if self.recorder and not resume_session:
+            # Emitir mensaje del usuario
+            self.recorder.emit(turn=turn, role="user", etype="user_message", summary=task[:200], data={"content": task, "message_type": "task"})
+            # Emitir inicio de ejecución
             self.recorder.emit(turn=turn, role="system", etype="run_started", summary=f"task={task}", data={"max_turns": max_turns})
 
         for _ in range(max_turns):
@@ -842,13 +845,13 @@ class MiniAgentSystem:
                     self._inject_prefs_for_coder(transcript)
                 
                 if self.recorder:
-                    self.recorder.emit(turn=turn, role="assistant", etype="coder_step_request", summary="consulta al Coder")
+                    self.recorder.emit(turn=turn, role="coder", etype="coder_step_request", summary="consulta al Coder")
                 coder_out = self.coder.step(task, transcript)
                 if self.recorder:
-                    self.recorder.emit(turn=turn, role="assistant", etype="coder_step_parsed", data={"keys": list(coder_out.keys())}, summary=f"type={coder_out.get('type')}")
+                    self.recorder.emit(turn=turn, role="coder", etype="coder_step_parsed", data={"keys": list(coder_out.keys())}, summary=f"type={coder_out.get('type')}")
             except Exception as e:
                 if self.recorder:
-                    self.recorder.emit(turn=turn, role="assistant", etype="coder_parse_error", summary=str(e))
+                    self.recorder.emit(turn=turn, role="coder", etype="coder_parse_error", summary=str(e))
                 self._append(transcript, 'assistant', f"[Coder] Error parseando salida del LLM: {e}")
                 if stream: self._print_turn(transcript[-1])
                 # Pedir nuevo intento
@@ -863,8 +866,11 @@ class MiniAgentSystem:
                 message = str(coder_out.get('message', ''))
                 self._append(transcript, 'assistant', f"[Coder] {message}\n\nPropuesta de respuesta:\n{answer}")
                 if self.recorder:
+                    # Emitir mensaje del Coder
+                    self.recorder.emit(turn=turn, role="coder", etype="coder_message", summary=message[:200], data={"content": message, "action": "final_answer"})
+                    # Emitir propuesta final
                     path = self.recorder.write_blob(f"final/turn_{turn:03d}_answer.txt", answer)
-                    self.recorder.emit(turn=turn, role="assistant", etype="coder_final_proposal", summary=message, data={"answer_path": path})
+                    self.recorder.emit(turn=turn, role="coder", etype="coder_final_proposal", summary=message, data={"answer_path": path, "answer": answer})
                 if stream: self._print_turn(transcript[-1])
 
             elif ctype in ('create_tool', 'call_tool'):
@@ -884,8 +890,11 @@ class MiniAgentSystem:
                     event_type = "tool_update" if is_update else "tool_create"
                     
                     if self.recorder:
+                        # Emitir mensaje del Coder sobre la creación
+                        self.recorder.emit(turn=turn, role="coder", etype="coder_message", summary=msg[:200], data={"content": msg, "action": "creating_tool", "tool_name": tname})
+                        # Emitir creación de herramienta con código
                         code_path = self.recorder.write_blob(f"tools_session/turn_{turn:03d}_{tname}.py", code)
-                        self.recorder.emit(turn=turn, role="assistant", etype=event_type, summary=f"def {tname}(args) - {action}", data={"code_path": code_path, "chars": len(code), "is_update": is_update})
+                        self.recorder.emit(turn=turn, role="coder", etype=event_type, summary=f"def {tname}(args) - {action}", data={"code_path": code_path, "chars": len(code), "is_update": is_update, "tool_name": tname, "code": code})
                     
                     # Registrar en memoria y **persistir** (permite sobrescritura)
                     try:
@@ -904,7 +913,7 @@ class MiniAgentSystem:
                         continue
                     
                     if self.recorder:
-                        self.recorder.emit(turn=turn, role="assistant", etype="tool_registered", data={"name": tname, "persistent_dir": str(self.tools.store_dir), "action": action})
+                        self.recorder.emit(turn=turn, role="coder", etype="tool_registered", data={"name": tname, "persistent_dir": str(self.tools.store_dir), "action": action})
                     
                     # Mostrar mensaje informativo si es actualización
                     if is_update and stream:
@@ -914,7 +923,7 @@ class MiniAgentSystem:
 
                 # Ejecutar herramienta
                 if self.recorder:
-                    self.recorder.emit(turn=turn, role="assistant", etype="tool_call", summary=f"{name}(args)", data={"args": args})
+                    self.recorder.emit(turn=turn, role="tool", etype="tool_call", summary=f"{name}(args)", data={"tool_name": name, "args": args})
                 
                 # Medición de latencia
                 t0 = perf_counter()
@@ -988,9 +997,9 @@ class MiniAgentSystem:
                 )
                 if self.recorder:
                     if isinstance(result, dict) and result.get("ok") is False:
-                        self.recorder.emit(turn=turn, role="assistant", etype="tool_result_error", data={"name": name, "error": result.get("error"), "traceback": result.get("traceback"), "code": result.get("code")})
+                        self.recorder.emit(turn=turn, role="tool", etype="tool_result_error", data={"tool_name": name, "name": name, "error": result.get("error"), "traceback": result.get("traceback"), "code": result.get("code")})
                     else:
-                        self.recorder.emit(turn=turn, role="assistant", etype="tool_result_ok", data={"name": name, "result": result_preview})
+                        self.recorder.emit(turn=turn, role="tool", etype="tool_result_ok", data={"tool_name": name, "name": name, "result": result_preview})
                 if stream: self._print_turn(transcript[-1])
 
             elif ctype in ('create_agent', 'call_agent'):
@@ -1026,7 +1035,7 @@ class MiniAgentSystem:
                         if self.recorder:
                             self.recorder.emit(
                                 turn=turn,
-                                role="assistant",
+                                role="agent",
                                 etype="agent_created" if not is_update else "agent_updated",
                                 summary=f"Agente '{agent_name}' {action}",
                                 data={
@@ -1067,7 +1076,7 @@ class MiniAgentSystem:
                     if self.recorder:
                         self.recorder.emit(
                             turn=turn,
-                            role="assistant",
+                            role="agent",
                             etype="agent_call",
                             summary=f"Llamando a agente '{agent_name}'",
                             data={"agent_name": agent_name, "task": agent_task}
@@ -1100,7 +1109,7 @@ class MiniAgentSystem:
                         if self.recorder:
                             self.recorder.emit(
                                 turn=turn,
-                                role="assistant",
+                                role="agent",
                                 etype="agent_response_ok",
                                 data={"agent_name": agent_name, "response_length": len(agent_response)}
                             )
@@ -1115,7 +1124,7 @@ class MiniAgentSystem:
                         if self.recorder:
                             self.recorder.emit(
                                 turn=turn,
-                                role="assistant",
+                                role="agent",
                                 etype="agent_response_error",
                                 data={"agent_name": agent_name, "error": error}
                             )
@@ -1131,7 +1140,7 @@ class MiniAgentSystem:
                 decision = self.supervisor.decide(task, transcript)
                 route = (decision.get('route') or '').lower()
                 if self.recorder:
-                    self.recorder.emit(turn=turn, role="assistant", etype="supervisor_decision", data=decision, summary=f"route={route}")
+                    self.recorder.emit(turn=turn, role="supervisor", etype="supervisor_decision", data=decision, summary=f"route={route}")
             except Exception as e:
                 route = 'coder'
                 decision = {'route': 'coder', 'reason': f'Error del supervisor: {e}', 'tips': ['Revisa el error y continúa.']}
@@ -1172,7 +1181,7 @@ class MiniAgentSystem:
                 feedback = f"[Supervisor] {reason}\n\n🔄 Continúa mejorando la solución."
             self._append(transcript, 'user', feedback)
             if self.recorder:
-                self.recorder.emit(turn=turn, role="assistant", etype="iteration_continue")
+                self.recorder.emit(turn=turn, role="supervisor", etype="iteration_continue")
             if stream: self._print_turn(transcript[-1])
             
             # Guardar progreso de sesión cada turno
@@ -1221,7 +1230,10 @@ if __name__ == '__main__':
 
     # Definir carpeta de sesión
     session_dir = Path(args.log_dir) / datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-    recorder = Recorder(str(session_dir))
+    
+    # Usar EnhancedRecorder para emitir al EventBus (dashboard en tiempo real)
+    session_id = args.session_id or datetime.now().strftime("%Y%m%d_%H%M%S")
+    recorder = EnhancedRecorder(str(session_dir), session_id=session_id)
 
     # Respetar --tools-dir
     os.environ['TOOL_STORE_DIR'] = args.tools_dir
@@ -1229,8 +1241,8 @@ if __name__ == '__main__':
     # Crear gestor de sesiones
     session_mgr = SessionManager(args.sessions_dir)
     
-    # Crear registro de agentes
-    agent_registry = AgentRegistry(llm, args.agents_dir)
+    # Crear registro de agentes (con session_id para aislamiento)
+    agent_registry = AgentRegistry(llm, args.agents_dir, session_id=session_id)
 
     system = MiniAgentSystem(llm, recorder=recorder, session_manager=session_mgr, agent_registry=agent_registry)
 

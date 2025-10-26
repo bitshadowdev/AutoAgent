@@ -296,6 +296,114 @@
       "status": "completed",
       "model": "@cf/openai/gpt-oss-120b",
       "tags": []
+    },
+    "20251026_125602": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251026_125602.json",
+      "task": "Hazme un scrapping de quotes to scrap y guardamelo en un json",
+      "created_at": "2025-10-26T15:56:44.328915Z",
+      "updated_at": "2025-10-26T15:56:55.626527Z",
+      "status": "completed",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251026_130014": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251026_130014.json",
+      "task": "hazme un scraaping de quotes yo scrap y guardalo en un json",
+      "created_at": "2025-10-26T16:00:40.868299Z",
+      "updated_at": "2025-10-26T16:00:50.907630Z",
+      "status": "completed",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251026_130218": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251026_130218.json",
+      "task": "haz un scrapping de quotes to scrape",
+      "created_at": "2025-10-26T16:03:01.719475Z",
+      "updated_at": "2025-10-26T16:03:01.719475Z",
+      "status": "completed",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251026_131559": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251026_131559.json",
+      "task": "hazme un scraping de quotes to scrap y guardame un json eso",
+      "created_at": "2025-10-26T16:16:15.011836Z",
+      "updated_at": "2025-10-26T16:17:34.119199Z",
+      "status": "completed",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251026_131922": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251026_131922.json",
+      "task": "hazme un scraping de quotes to scrap y guardame en un json ese contenido",
+      "created_at": "2025-10-26T16:19:38.741266Z",
+      "updated_at": "2025-10-26T16:20:03.525960Z",
+      "status": "completed",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251026_132201": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251026_132201.json",
+      "task": "hazme un scraping de quotes to scrap y guardame en un json ese contenido",
+      "created_at": "2025-10-26T16:22:15.000442Z",
+      "updated_at": "2025-10-26T16:22:42.791072Z",
+      "status": "completed",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251026_132708": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251026_132708.json",
+      "task": "scrapea quotes to scrap y guardalo en un json",
+      "created_at": "2025-10-26T16:27:21.352161Z",
+      "updated_at": "2025-10-26T16:27:21.352161Z",
+      "status": "completed",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251026_132902": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251026_132902.json",
+      "task": "haz un scrap de quotes to scrap y guardalo en un json",
+      "created_at": "2025-10-26T16:29:15.231006Z",
+      "updated_at": "2025-10-26T16:39:29.161573Z",
+      "status": "completed",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251026_134148": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251026_134148.json",
+      "task": "haz un scrap de quotes to scrap y guardalo en un json",
+      "created_at": "2025-10-26T16:42:00.418681Z",
+      "updated_at": "2025-10-26T16:42:19.361388Z",
+      "status": "completed",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251026_134728": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251026_134728.json",
+      "task": "haz un scrap de quotes to scrap y guardalo en un json",
+      "created_at": "2025-10-26T16:47:40.824314Z",
+      "updated_at": "2025-10-26T16:47:57.979940Z",
+      "status": "completed",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251026_135320": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251026_135320.json",
+      "task": "haz un scrap de quotes to scrap y guardalo en un json",
+      "created_at": "2025-10-26T16:53:33.616846Z",
+      "updated_at": "2025-10-26T16:53:52.113373Z",
+      "status": "completed",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251026_135915": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251026_135915.json",
+      "task": "haz un scrap de quotes to scrap y guardalo en un json",
+      "created_at": "2025-10-26T16:59:30.578943Z",
+      "updated_at": "2025-10-26T16:59:30.578943Z",
+      "status": "completed",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
     }
   }
 }

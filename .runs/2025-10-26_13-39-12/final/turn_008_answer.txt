@@ -1,0 +1,110 @@
+```python
+import requests
+import json
+import sys
+from pathlib import Path
+from bs4 import BeautifulSoup
+
+def scrape_quotes(base_url: str) -> list:
+    """Recorre todas las páginas y devuelve una lista de diccionarios con
+    'text', 'author' y 'tags'."""
+    quotes = []
+    url = base_url.rstrip('/')
+    while True:
+        try:
+            resp = requests.get(url, timeout=10)
+            resp.raise_for_status()
+        except requests.RequestException as e:
+            raise RuntimeError(f"Error al obtener {url}: {e}")
+
+        soup = BeautifulSoup(resp.text, "html.parser")
+        for item in soup.select('.quote'):
+            text = item.select_one('.text').get_text(strip=True)
+            author = item.select_one('.author').get_text(strip=True)
+            tags = [t.get_text(strip=True) for t in item.select('.tags .tag')]
+            quotes.append({"text": text, "author": author, "tags": tags})
+
+        # buscar enlace a la siguiente página
+        nxt = soup.select_one('li.next > a')
+        if nxt and nxt.get('href'):
+            url = base_url.rstrip('/') + nxt['href']
+        else:
+            break
+    return quotes
+
+def save_json(data: list, path: Path) -> None:
+    """Guarda la lista ``data`` en ``path`` con manejo de errores de I/O."""
+    try:
+        with path.open('w', encoding='utf-8') as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+    except OSError as e:
+        raise RuntimeError(f"No se pudo escribir el archivo {path}: {e}")
+
+def verify_file(path: Path) -> bool:
+    """Lee el archivo y comprueba que sea una lista de diccionarios con los campos esperados."""
+    try:
+        with path.open('r', encoding='utf-8') as f:
+            content = json.load(f)
+        if not isinstance(content, list):
+            return False
+        for item in content:
+            if not all(k in item for k in ("text", "author", "tags")):
+                return False
+        return True
+    except Exception:
+        return False
+
+if __name__ == '__main__':
+    # ruta de salida por argumento o 'quotes.json' por defecto
+    output_path = Path(sys.argv[1]) if len(sys.argv) > 1 else Path('quotes.json')
+    base_url = 'http://quotes.toscrape.com/'
+    try:
+        all_quotes = scrape_quotes(base_url)
+        save_json(all_quotes, output_path)
+        if verify_file(output_path):
+            print(f"✅ Scraping completado. {len(all_quotes)} citas guardadas en '{output_path}'.")
+            # Mostrar una muestra de las primeras 3 citas
+            print('\n--- Muestra (primeras 3 citas) ---')
+            for q in all_quotes[:3]:
+                print(json.dumps(q, ensure_ascii=False, indent=2))
+        else:
+            print('⚠️ Archivo guardado pero la verificación falló.')
+    except Exception as err:
+        print(f'❌ Error: {err}')
+```
+
+### Muestra del archivo **quotes.json** (primeras 3 citas)
+```json
+[
+  {
+    "text": "“The world as we have created it is a process of our thinking. It cannot be changed without changing our thinking.”",
+    "author": "Albert Einstein",
+    "tags": ["change", "deep-thoughts", "thinking", "world"]
+  },
+  {
+    "text": "“It is our choices, Harry, that show what we truly are, far more than our abilities.”",
+    "author": "J.K. Rowling",
+    "tags": ["abilities", "choices"]
+  },
+  {
+    "text": "“There are only two ways to live your life. One is as though nothing is a miracle. The other is as though everything is a miracle.”",
+    "author": "Albert Einstein",
+    "tags": ["inspirational", "life", "live", "miracle", "miracles"]
+  }
+  ...
+]
+```
+
+**Cómo ejecutar**
+1. Guardar el script anterior en un archivo, por ejemplo `scrape_quotes.py`.
+2. Instalar dependencias:
+   ```bash
+   pip install requests beautifulsoup4
+   ```
+3. Ejecutar:
+   ```bash
+   python scrape_quotes.py           # guarda en quotes.json (ruta por defecto)
+   # o especificar otra ruta
+   python scrape_quotes.py salida.json
+   ```
+4. El archivo JSON resultante se encontrará en la ruta indicada (por defecto `quotes.json` en el directorio actual).

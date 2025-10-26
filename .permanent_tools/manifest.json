@@ -14,9 +14,9 @@
     },
     "scrape_quotes": {
       "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.permanent_tools\\scrape_quotes.py",
-      "version": 1,
+      "version": 14,
       "created_at": "2025-10-26T00:13:40.568042Z",
-      "updated_at": "2025-10-26T00:13:40.568042Z"
+      "updated_at": "2025-10-26T16:59:20.748384Z"
     },
     "get_ai_news": {
       "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.permanent_tools\\get_ai_news.py",
@@ -293,6 +293,30 @@
       "version": 1,
       "created_at": "2025-10-26T14:32:22.559657Z",
       "updated_at": "2025-10-26T14:32:22.559657Z"
+    },
+    "read_json_file": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.permanent_tools\\read_json_file.py",
+      "version": 1,
+      "created_at": "2025-10-26T16:00:47.147212Z",
+      "updated_at": "2025-10-26T16:00:47.147212Z"
+    },
+    "scrape_all_quotes": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.permanent_tools\\scrape_all_quotes.py",
+      "version": 8,
+      "created_at": "2025-10-26T16:16:30.383126Z",
+      "updated_at": "2025-10-26T16:53:42.293396Z"
+    },
+    "fetch_all_quotes": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.permanent_tools\\fetch_all_quotes.py",
+      "version": 1,
+      "created_at": "2025-10-26T16:17:22.903438Z",
+      "updated_at": "2025-10-26T16:17:22.903438Z"
+    },
+    "scrape_and_save_quotes": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.permanent_tools\\scrape_and_save_quotes.py",
+      "version": 1,
+      "created_at": "2025-10-26T16:29:25.950309Z",
+      "updated_at": "2025-10-26T16:29:25.950309Z"
     }
   }
 }
