@@ -21,14 +21,15 @@ Sistema de agentes inteligentes (Supervisor + Coder) con **persistencia completa
 - **Supervisor**: Evalúa resultados y decide próximos pasos
 - Modo abierto: permite imports, acceso a red, sistema de archivos, etc.
 
-### ✅ Agentes Dinámicos 🤖
+### ✅ Agentes Dinámicos 🤖 **ACTUALIZADO**
+- **Agentes específicos por sesión** - Cada proyecto tiene su propio equipo
 - **Creación de agentes especializados** durante la ejecución
-- **Coder y Supervisor** pueden crear nuevos agentes para tareas específicas
-- **Persistencia automática** de agentes en disco (`.agents/`)
-- **Reutilización** de agentes entre sesiones
-- **Colaboración multi-agente** para tareas complejas
+- **Aislamiento completo** - Diferentes sistemas para diferentes proyectos
+- **Persistencia automática** por sesión (`.agents/{session_id}/`)
+- **Colaboración multi-agente** dentro de cada sesión
+- **Nuevos comandos**: `--agents-list`, `--agents-all-sessions`
 - Ejemplos: `data_analyst`, `ux_designer`, `security_auditor`
-- Ver guía completa en [AGENTES_DINAMICOS.md](AGENTES_DINAMICOS.md)
+- Ver guías: [AGENTES_DINAMICOS.md](AGENTES_DINAMICOS.md) y [AGENTES_POR_SESION.md](AGENTES_POR_SESION.md)
 
 ### ✅ Integración MCP (Model Context Protocol) 🔌 **NUEVO**
 - **Conecta servidores MCP externos** para expandir capacidades
@@ -206,27 +207,55 @@ python sistema_agentes_supervisor_coder.py -q "Calcula 25 * 4 usando la calculad
 
 Ver guía completa en [QUICK_START_MCP.md](QUICK_START_MCP.md)
 
-## 🤖 Gestión de Agentes Dinámicos
+## 🤖 Gestión de Agentes Dinámicos (Por Sesión)
 
-### Listar agentes creados
+### Listar agentes de una sesión específica
 
 ```bash
+# Agentes de una sesión concreta
+python sistema_agentes_supervisor_coder.py --agents-list --session-id mi_proyecto
+
+# Agentes de la sesión "global" (sin session-id)
 python sistema_agentes_supervisor_coder.py --agents-list
 ```
 
-### Ejemplo de uso: Crear un agente analista
+### Ver agentes de TODAS las sesiones
 
 ```bash
-python sistema_agentes_supervisor_coder.py -q "Analiza el archivo datos.csv y genera insights" --session-id analisis
+python sistema_agentes_supervisor_coder.py --agents-all-sessions
 ```
 
-El Coder automáticamente creará un agente `data_analyst` si lo necesita.
+### Ejemplo: Crear agentes en diferentes proyectos
 
-### Cambiar directorio de agentes
+```bash
+# Proyecto ML: agentes especializados en datos
+python sistema_agentes_supervisor_coder.py \
+  -q "Crea un agente data_scientist experto en ML" \
+  --session-id proyecto_ml
+
+# Proyecto Web: agentes especializados en desarrollo
+python sistema_agentes_supervisor_coder.py \
+  -q "Crea un agente frontend_dev experto en React" \
+  --session-id web_app
+
+# Los agentes están completamente aislados entre sesiones
+```
+
+### Ver información detallada de un agente
+
+```bash
+python sistema_agentes_supervisor_coder.py \
+  --agent-info data_scientist \
+  --session-id proyecto_ml
+```
+
+### Cambiar directorio base de agentes
 
 ```bash
 python sistema_agentes_supervisor_coder.py --agents-dir /ruta/custom -q "tarea"
 ```
+
+Ver guía completa en [AGENTES_POR_SESION.md](AGENTES_POR_SESION.md)
 
 ## 📁 Estructura del Proyecto
 
@@ -249,9 +278,16 @@ AutoAgent/
 ├── .permanent_tools/                         # Herramientas persistentes
 │   ├── manifest.json                        # Metadatos de herramientas
 │   └── *.py                                 # Archivos de herramientas
-├── .agents/                                  # Agentes dinámicos
-│   ├── manifest.json                        # Índice de agentes
-│   └── *.json                               # Definiciones de agentes
+├── .agents/                                  # Agentes dinámicos (POR SESIÓN - ACTUALIZADO)
+│   ├── global/                              # Sesión global (sin session-id)
+│   │   ├── manifest.json                    # Índice de agentes de esta sesión
+│   │   └── *.json                           # Definiciones de agentes
+│   ├── proyecto_ml/                         # Sesión "proyecto_ml"
+│   │   ├── manifest.json
+│   │   └── *.json
+│   └── web_app/                             # Sesión "web_app"
+│       ├── manifest.json
+│       └── *.json
 ├── .sessions/                                # Sesiones persistentes
 │   ├── index.json                           # Índice de sesiones
 │   └── *.json                               # Datos de sesiones

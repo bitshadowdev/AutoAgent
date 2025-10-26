@@ -801,6 +801,8 @@ class MiniAgentSystem:
             if loaded:
                 transcript = loaded.transcript.copy()
                 self.current_session_id = session_id
+                # Cambiar AgentRegistry a la sesión cargada
+                self.agents.switch_session(session_id)
                 self.tools_used_in_session = loaded.tools_used.copy()
                 # Hidratar telemetría y preferencias desde sesión previa
                 if loaded.custom_data and isinstance(loaded.custom_data, dict):
@@ -825,6 +827,8 @@ class MiniAgentSystem:
         # Crear o actualizar sesión
         if session_id:
             self.current_session_id = session_id
+            # Cambiar AgentRegistry a esta sesión
+            self.agents.switch_session(session_id)
         
         turn = len(transcript)  # Continuar desde el último turno
         if self.recorder and not resume_session:
@@ -1203,9 +1207,10 @@ if __name__ == '__main__':
     parser.add_argument('--tools-list', action='store_true', help='Listar tools persistentes y salir.')
     parser.add_argument('--tools-dir', dest='tools_dir', default=os.environ.get('TOOL_STORE_DIR', '.permanent_tools'), help='Directorio de tools persistentes.')
     # Argumentos para agentes
-    parser.add_argument('--agents-list', action='store_true', help='Listar agentes dinámicos y salir.')
+    parser.add_argument('--agents-list', action='store_true', help='Listar agentes dinámicos de la sesión actual (o global si no hay session-id).')
+    parser.add_argument('--agents-all-sessions', action='store_true', help='Listar agentes de TODAS las sesiones.')
     parser.add_argument('--agent-info', dest='agent_info', help='Mostrar información detallada de un agente específico.')
-    parser.add_argument('--agents-dir', dest='agents_dir', default='.agents', help='Directorio de agentes dinámicos.')
+    parser.add_argument('--agents-dir', dest='agents_dir', default='.agents', help='Directorio base de agentes dinámicos.')
     # Nuevos argumentos para sesiones
     parser.add_argument('--session-id', dest='session_id', help='ID de la sesión (auto-generado si no se especifica).')
     parser.add_argument('--resume', dest='resume_session', action='store_true', help='Reanudar sesión anterior especificada con --session-id.')
@@ -1236,22 +1241,56 @@ if __name__ == '__main__':
             print(" -", name)
         raise SystemExit(0)
     
-    # Comando: listar agentes
+    # Comando: listar agentes de todas las sesiones
+    if args.agents_all_sessions:
+        print(f"Agentes dinámicos por sesión (directorio base: {system.agents.agents_base_dir}):")
+        sessions = system.agents.list_all_sessions()
+        if not sessions:
+            print("  (ningún agente creado aún en ninguna sesión)")
+        else:
+            counts = system.agents.count_agents_by_session()
+            for session in sessions:
+                count = counts.get(session, 0)
+                print(f"\n📁 Sesión: {session} ({count} agente(s))")
+                # Cambiar temporalmente a esa sesión para listar
+                temp_registry = AgentRegistry(llm, args.agents_dir, session_id=session)
+                agents = temp_registry.list_agents()
+                if agents:
+                    print(f"  {'Nombre':18s} {'Rol':28s} {'Capacidades':38s}")
+                    print("  " + "=" * 90)
+                    for agent in agents:
+                        caps = ', '.join(agent['capabilities'][:2])
+                        if len(agent['capabilities']) > 2:
+                            caps += '...'
+                        print(f"  {agent['name']:18s} {agent['role']:28s} {caps:38s}")
+            print(f"\n📊 Total: {len(sessions)} sesión(es) con agentes")
+        raise SystemExit(0)
+    
+    # Comando: listar agentes de la sesión actual
     if args.agents_list:
-        print(f"Agentes dinámicos en {system.agents.agents_dir}:")
+        current_session = args.session_id or "global"
+        print(f"🤖 Agentes dinámicos de la sesión: {current_session}")
+        print(f"Directorio: {system.agents.agents_dir}\n")
         agents = system.agents.list_agents()
         if not agents:
-            print("  (ningún agente creado aún)")
+            print("  (ningún agente creado aún en esta sesión)")
+            # Mostrar hint sobre otras sesiones
+            all_sessions = system.agents.list_all_sessions()
+            if len(all_sessions) > 1:
+                print(f"\n💡 Hay agentes en otras sesiones: {', '.join([s for s in all_sessions if s != current_session])}")
+                print("   Usa --agents-all-sessions para verlos todos")
         else:
-            print(f"\n{'Nombre':20s} {'Rol':30s} {'Capacidades':40s} {'Creado por':15s}")
+            print(f"{'Nombre':20s} {'Rol':30s} {'Capacidades':40s} {'Creado por':15s}")
             print("=" * 110)
             for agent in agents:
                 caps = ', '.join(agent['capabilities'][:3])  # Primeras 3 capacidades
                 if len(agent['capabilities']) > 3:
                     caps += '...'
                 print(f"{agent['name']:20s} {agent['role']:30s} {caps:40s} {agent['created_by']:15s}")
-            print(f"\nTotal: {len(agents)} agentes")
-            print(f"\n💡 Tip: Para ver detalles de un agente específico, usa: --agent-info NOMBRE")
+            print(f"\nTotal: {len(agents)} agente(s) en esta sesión")
+            print(f"\n💡 Tips:")
+            print(f"  - Ver detalles: --agent-info NOMBRE --session-id {current_session}")
+            print(f"  - Ver todas las sesiones: --agents-all-sessions")
         raise SystemExit(0)
     
     # Comando: info de agente

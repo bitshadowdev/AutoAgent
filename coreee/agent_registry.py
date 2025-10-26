@@ -94,12 +94,20 @@ class DynamicAgent:
 
 
 class AgentRegistry:
-    """Registro de agentes dinámicos en una sesión"""
+    """Registro de agentes dinámicos específicos por sesión"""
     
-    def __init__(self, llm, agents_dir: str = ".agents"):
+    def __init__(self, llm, agents_base_dir: str = ".agents", session_id: Optional[str] = None):
         self.llm = llm
-        self.agents_dir = Path(agents_dir).resolve()
+        self.session_id = session_id or "global"
+        
+        # Directorio base y directorio de la sesión
+        self.agents_base_dir = Path(agents_base_dir).resolve()
+        self.agents_base_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Directorio específico de esta sesión
+        self.agents_dir = self.agents_base_dir / self.session_id
         self.agents_dir.mkdir(parents=True, exist_ok=True)
+        
         self.manifest_file = self.agents_dir / "manifest.json"
         
         # Agentes activos en memoria
@@ -108,7 +116,7 @@ class AgentRegistry:
         # Cargar manifest
         self._manifest = self._load_manifest()
         
-        # Cargar agentes persistidos
+        # Cargar agentes persistidos de esta sesión
         self.load_persisted_agents()
     
     def _load_manifest(self) -> Dict[str, Any]:
@@ -234,7 +242,7 @@ class AgentRegistry:
         return name in self._agents
     
     def list_agents(self) -> List[Dict[str, Any]]:
-        """Lista todos los agentes con sus metadatos"""
+        """Lista todos los agentes de esta sesión con sus metadatos"""
         agents_list = []
         for name, agent in self._agents.items():
             agents_list.append({
@@ -242,9 +250,55 @@ class AgentRegistry:
                 "role": agent.role,
                 "capabilities": agent.definition.capabilities,
                 "created_at": agent.definition.created_at,
-                "created_by": agent.definition.created_by
+                "created_by": agent.definition.created_by,
+                "session_id": self.session_id
             })
         return sorted(agents_list, key=lambda x: x["created_at"])
+    
+    def list_all_sessions(self) -> List[str]:
+        """Lista todas las sesiones que tienen agentes"""
+        sessions = []
+        if self.agents_base_dir.exists():
+            for item in self.agents_base_dir.iterdir():
+                if item.is_dir() and (item / "manifest.json").exists():
+                    sessions.append(item.name)
+        return sorted(sessions)
+    
+    def count_agents_by_session(self) -> Dict[str, int]:
+        """Cuenta agentes por sesión"""
+        counts = {}
+        for session in self.list_all_sessions():
+            manifest_file = self.agents_base_dir / session / "manifest.json"
+            try:
+                manifest = json.loads(manifest_file.read_text(encoding="utf-8"))
+                counts[session] = len(manifest.get("agents", {}))
+            except Exception:
+                counts[session] = 0
+        return counts
+    
+    def switch_session(self, session_id: str) -> None:
+        """
+        Cambia a una sesión diferente, cargando sus agentes.
+        
+        Args:
+            session_id: ID de la sesión a cargar
+        """
+        self.session_id = session_id
+        
+        # Cambiar al directorio de la nueva sesión
+        self.agents_dir = self.agents_base_dir / self.session_id
+        self.agents_dir.mkdir(parents=True, exist_ok=True)
+        
+        self.manifest_file = self.agents_dir / "manifest.json"
+        
+        # Limpiar agentes actuales
+        self._agents.clear()
+        
+        # Cargar manifest de la nueva sesión
+        self._manifest = self._load_manifest()
+        
+        # Cargar agentes de la nueva sesión
+        self.load_persisted_agents()
     
     def delete_agent(self, name: str) -> bool:
         """Elimina un agente"""
