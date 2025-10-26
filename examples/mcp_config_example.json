@@ -1,0 +1,10 @@
+[
+  {
+    "name": "demo",
+    "cmd": "python",
+    "args": ["examples/mcp_server_demo.py"],
+    "env": {},
+    "allow_list": null,
+    "timeout": 30.0
+  }
+]

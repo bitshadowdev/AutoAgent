@@ -1,0 +1,38 @@
+{
+  "metadata": {
+    "session_id": "20251026_111058",
+    "task": "instala winget install ffmpeg",
+    "created_at": "2025-10-26T14:13:18.859242Z",
+    "updated_at": "2025-10-26T14:13:18.859242Z",
+    "total_turns": 1,
+    "status": "completed",
+    "model": "@cf/openai/gpt-oss-120b",
+    "tags": []
+  },
+  "transcript": [
+    {
+      "role": "assistant",
+      "content": "[Coder] Se crea una herramienta para ejecutar comandos del sistema, permitiendo instalar paquetes con winget.\n\nHerramienta usada: run_command\nArgs: {'command': 'winget install ffmpeg -e -h'}\nResultado: {\"ok\": true, \"returncode\": 0, \"stdout\": \"- \\n   \\\\ \\n                                                                                                                        \\n\\n  â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’  1024 KB / 2.34 MB\\n  â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–’â–’â–’â–’â–’  2.00 MB / 2.34 MB\\n  â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ  2.34 MB / 2.34 MB\\n                                                                                                                        \\n\\n  â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â..."
+    }
+  ],
+  "tools_used": [
+    "run_command"
+  ],
+  "custom_data": {
+    "tool_stats": {
+      "run_command": {
+        "calls": 2,
+        "ok": 2,
+        "errors": 0,
+        "avg_latency_ms": 26529.811119986698,
+        "last_error": null,
+        "last_args_sample": {},
+        "score": 0.8,
+        "last_ok_at": "2025-10-26T14:13:18.859242Z"
+      }
+    },
+    "agent_stats": {},
+    "user_prefs": {},
+    "agents_used": []
+  }
+}

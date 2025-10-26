@@ -21,7 +21,7 @@ Sistema de agentes inteligentes (Supervisor + Coder) con **persistencia completa
 - **Supervisor**: Evalúa resultados y decide próximos pasos
 - Modo abierto: permite imports, acceso a red, sistema de archivos, etc.
 
-### ✅ Agentes Dinámicos (NUEVO 🤖)
+### ✅ Agentes Dinámicos 🤖
 - **Creación de agentes especializados** durante la ejecución
 - **Coder y Supervisor** pueden crear nuevos agentes para tareas específicas
 - **Persistencia automática** de agentes en disco (`.agents/`)
@@ -29,6 +29,15 @@ Sistema de agentes inteligentes (Supervisor + Coder) con **persistencia completa
 - **Colaboración multi-agente** para tareas complejas
 - Ejemplos: `data_analyst`, `ux_designer`, `security_auditor`
 - Ver guía completa en [AGENTES_DINAMICOS.md](AGENTES_DINAMICOS.md)
+
+### ✅ Integración MCP (Model Context Protocol) 🔌 **NUEVO**
+- **Conecta servidores MCP externos** para expandir capacidades
+- **Descubrimiento automático** de herramientas MCP al inicio
+- **Sin cambios en el flujo**: tools MCP funcionan como herramientas locales
+- **Namespacing**: tools MCP usan formato `servidor:tool_name`
+- **Telemetría completa**: métricas, errores y scoring integrados
+- **Servidor demo incluido** con 5 herramientas de ejemplo
+- Ver guía completa en [docs/MCP_INTEGRATION.md](docs/MCP_INTEGRATION.md) y [QUICK_START_MCP.md](QUICK_START_MCP.md)
 
 ### ✅ Auto-corrección con Retry Inteligente
 - **Detección automática de errores** con sugerencias específicas
@@ -65,7 +74,15 @@ source venv/bin/activate
 pip install -r requirement.txt
 ```
 
-4. **Configurar variables de entorno**
+4. **(Opcional) Instalar integración MCP**
+```bash
+pip install mcp
+# O usar el script de setup automático
+.\setup_mcp.ps1  # Windows
+bash setup_mcp.sh  # Linux/Mac
+```
+
+5. **Configurar variables de entorno**
 
 Crear archivo `.env` en la raíz del proyecto:
 ```env
@@ -159,6 +176,36 @@ python sistema_agentes_supervisor_coder.py --tools-list
 python sistema_agentes_supervisor_coder.py --tools-dir /ruta/custom -q "tarea"
 ```
 
+## 🔌 Uso de Herramientas MCP
+
+### Configurar servidor MCP
+
+**Windows PowerShell:**
+```powershell
+$env:MCP_STDIO='[{"name":"demo","cmd":"python","args":["examples/mcp_server_demo.py"]}]'
+```
+
+**Linux/Mac:**
+```bash
+export MCP_STDIO='[{"name":"demo","cmd":"python","args":["examples/mcp_server_demo.py"]}]'
+```
+
+### Listar herramientas MCP disponibles
+
+```bash
+python sistema_agentes_supervisor_coder.py --tools-list
+# Verás tools como: demo:calculate, demo:count_words, etc.
+```
+
+### Usar herramienta MCP en una tarea
+
+```bash
+python sistema_agentes_supervisor_coder.py -q "Calcula 25 * 4 usando la calculadora"
+# El Coder automáticamente usará demo:calculate
+```
+
+Ver guía completa en [QUICK_START_MCP.md](QUICK_START_MCP.md)
+
 ## 🤖 Gestión de Agentes Dinámicos
 
 ### Listar agentes creados
@@ -187,11 +234,18 @@ python sistema_agentes_supervisor_coder.py --agents-dir /ruta/custom -q "tarea"
 AutoAgent/
 ├── coreee/
 │   ├── sistema_agentes_supervisor_coder.py  # Sistema principal
+│   ├── mcp_bridge.py                        # Bridge para servidores MCP (NUEVO)
 │   ├── session_manager.py                   # Gestión de sesiones
 │   ├── agent_registry.py                    # Registro de agentes dinámicos
 │   ├── manage_sessions.py                   # CLI para sesiones
 │   ├── llm_client.py                        # Cliente LLM
 │   └── timeline_recorder.py                 # Grabación de eventos
+├── examples/
+│   ├── mcp_server_demo.py                   # Servidor MCP de demostración (NUEVO)
+│   ├── mcp_config_example.json              # Ejemplo de configuración MCP
+│   └── README.md                            # Documentación de ejemplos
+├── docs/
+│   └── MCP_INTEGRATION.md                   # Guía completa de integración MCP (NUEVO)
 ├── .permanent_tools/                         # Herramientas persistentes
 │   ├── manifest.json                        # Metadatos de herramientas
 │   └── *.py                                 # Archivos de herramientas
@@ -207,6 +261,10 @@ AutoAgent/
 │       ├── timeline.md                      # Timeline en Markdown
 │       ├── timeline.html                    # Timeline en HTML
 │       └── transcript.json                  # Transcripción completa
+├── setup_mcp.ps1                            # Script de setup MCP (Windows) (NUEVO)
+├── setup_mcp.sh                             # Script de setup MCP (Linux/Mac) (NUEVO)
+├── test_mcp_integration.py                  # Tests de integración MCP (NUEVO)
+├── QUICK_START_MCP.md                       # Guía rápida MCP (NUEVO)
 ├── .env                                      # Variables de entorno
 └── README.md                                 # Este archivo
 ```

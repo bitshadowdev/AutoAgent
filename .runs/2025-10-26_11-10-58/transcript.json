@@ -1,0 +1,6 @@
+[
+  {
+    "role": "assistant",
+    "content": "[Coder] Se crea una herramienta para ejecutar comandos del sistema, permitiendo instalar paquetes con winget.\n\nHerramienta usada: run_command\nArgs: {'command': 'winget install ffmpeg -e -h'}\nResultado: {\"ok\": true, \"returncode\": 0, \"stdout\": \"- \\n   \\\\ \\n                                                                                                                        \\n\\n  â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’  1024 KB / 2.34 MB\\n  â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–’â–’â–’â–’â–’  2.00 MB / 2.34 MB\\n  â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ  2.34 MB / 2.34 MB\\n                                                                                                                        \\n\\n  â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â..."
+  }
+]

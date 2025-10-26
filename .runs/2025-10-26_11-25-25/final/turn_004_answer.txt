@@ -1,0 +1,1 @@
+La clave de ElevenLabs que proporcionaste no es válida (la API devuelve un error 401). Por favor, verifica que la clave esté escrita exactamente sin espacios ni caracteres extra y que siga estando activa. Cuando tengas una clave válida, envíamela y podré generar el poema, sintetizarlo con ElevenLabs y reproducirlo en tu computadora.

@@ -242,6 +242,60 @@
       "status": "active",
       "model": "@cf/openai/gpt-oss-120b",
       "tags": []
+    },
+    "20251026_110651": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251026_110651.json",
+      "task": "Extrae las innovaciones más relevantes en cuanto a inteligencia artificial, valida 2 fuentes web por año y publica un informe con citas en Notion. Adjunta una tabla de impacto (breve, fuente y año)",
+      "created_at": "2025-10-26T14:08:22.839822Z",
+      "updated_at": "2025-10-26T14:08:22.839822Z",
+      "status": "completed",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251026_111058": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251026_111058.json",
+      "task": "instala winget install ffmpeg",
+      "created_at": "2025-10-26T14:13:18.859242Z",
+      "updated_at": "2025-10-26T14:13:18.859242Z",
+      "status": "completed",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251026_111616": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251026_111616.json",
+      "task": "conectate al mcp de elevenlabs y genera un poema en audio, luego lo reproduces con python:eacefa18eca0583f77f3d908ba72c1e6e3cf2f39a27fa79bb1c85cb8cbaa56e0 aqui tienes la api key",
+      "created_at": "2025-10-26T14:17:06.576639Z",
+      "updated_at": "2025-10-26T14:18:13.696696Z",
+      "status": "active",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251026_111828": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251026_111828.json",
+      "task": "conectate al mcp de elevenlabs y genera un poema en audio, luego lo reproduces con python: conectate al mcp de elevenlabs y genera un poema en audio, luego lo reproduces con python:sk_ba966103551a74998532d1201d01b69cc24887c879f5def3  aqui tienes la api key",
+      "created_at": "2025-10-26T14:19:24.632330Z",
+      "updated_at": "2025-10-26T14:22:10.462714Z",
+      "status": "active",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251026_112526": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251026_112526.json",
+      "task": "hazme un poema con elevenlabs y reproducelo aqui en el computador, esta es mi api key:sk_1f5561f6a0cf20348e0f45fd63eb42ace0c78eb0feb3329f",
+      "created_at": "2025-10-26T14:26:09.617009Z",
+      "updated_at": "2025-10-26T14:28:09.617039Z",
+      "status": "active",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
+    },
+    "20251026_113033": {
+      "path": "C:\\Users\\israe\\OneDrive\\Escritorio\\AutoAgent\\.sessions\\20251026_113033.json",
+      "task": "hazme un poema con elevenlabs y reproducelo aqui en el computador, esta es mi api key: sk_62c428bc9f293165a5a2c472fb2487f234a68137b9292f8f",
+      "created_at": "2025-10-26T14:31:14.057133Z",
+      "updated_at": "2025-10-26T14:32:56.652050Z",
+      "status": "completed",
+      "model": "@cf/openai/gpt-oss-120b",
+      "tags": []
     }
   }
 }

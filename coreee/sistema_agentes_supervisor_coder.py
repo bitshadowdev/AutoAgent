@@ -35,6 +35,7 @@ from pathlib import Path
 from datetime import datetime
 from time import perf_counter
 from copy import deepcopy
+import asyncio
 
 # Agregar el directorio padre al PYTHONPATH para imports absolutos
 _project_root = Path(__file__).parent.parent
@@ -303,6 +304,32 @@ class ToolRegistry:
         if loaded:
             self._save_manifest()
         return loaded
+
+    def register_callable(self, name: str, fn, source: str = "mcp", meta: dict | None = None) -> None:
+        """Registra una tool externa (no guarda .py en disco).
+        
+        Útil para tools de servidores MCP o cualquier callable externo.
+        Se registra en el manifest para que aparezca en listados, pero sin archivo .py.
+        
+        Args:
+            name: Nombre de la tool (ej: "server:tool")
+            fn: Callable que acepta dict y retorna resultado JSON-serializable
+            source: Origen de la tool (default: "mcp")
+            meta: Metadatos adicionales opcionales (ej: {"server": "weather"})
+        """
+        self._tools[name] = fn  # mismo mapa que usan las tools persistentes
+        now = datetime.utcnow().isoformat() + "Z"
+        entry = {
+            "path": None,  # No hay archivo en disco
+            "version": 1,
+            "created_at": now,
+            "updated_at": now,
+            "source": source
+        }
+        if meta:
+            entry.update(meta)
+        self._manifest_data.setdefault("tools", {})[name] = entry
+        self._save_manifest()
 
     # --------- API pública ---------
     def has(self, name: str) -> bool:
@@ -620,6 +647,60 @@ class MiniAgentSystem:
             "agent_stats": {},
             "user_prefs": {}
         }
+        
+        # --------- Autoconexión de servidores MCP ---------
+        self.mcp_bridge = None
+        self.mcp_stats = None
+        cfg = os.environ.get("MCP_STDIO")
+        if cfg:
+            try:
+                from coreee.mcp_bridge import connect_mcp_servers_from_env
+                
+                # Ejecutar conexión async de forma síncrona
+                loop = asyncio.get_event_loop()
+                self.mcp_stats = loop.run_until_complete(
+                    connect_mcp_servers_from_env(self.tools, env_var="MCP_STDIO")
+                )
+                
+                # Registrar evento de conexión en recorder si está disponible
+                if self.recorder and self.mcp_stats:
+                    if self.mcp_stats["servers_connected"] > 0:
+                        self.recorder.emit(
+                            turn=0, 
+                            role="system", 
+                            etype="mcp_connected",
+                            summary=f"MCP: {self.mcp_stats['servers_connected']} servidores, {self.mcp_stats['total_tools']} tools",
+                            data=self.mcp_stats
+                        )
+                    if self.mcp_stats.get("errors"):
+                        for err in self.mcp_stats["errors"]:
+                            self.recorder.emit(
+                                turn=0,
+                                role="system",
+                                etype="mcp_error",
+                                summary=f"Error en servidor '{err['server']}'",
+                                data=err
+                            )
+            except ImportError:
+                # El paquete 'mcp' no está instalado
+                if self.recorder:
+                    self.recorder.emit(
+                        turn=0,
+                        role="system",
+                        etype="mcp_unavailable",
+                        summary="Paquete 'mcp' no instalado. Ejecuta: pip install mcp",
+                        data={"env_var": "MCP_STDIO", "value": cfg[:100]}
+                    )
+            except Exception as e:
+                # Error genérico conectando MCP
+                if self.recorder:
+                    self.recorder.emit(
+                        turn=0, 
+                        role="system", 
+                        etype="mcp_error",
+                        summary=f"Error autoconectando MCP: {str(e)}",
+                        data={"error": str(e), "traceback": traceback.format_exc()}
+                    )
 
     def _append(self, transcript: List[Dict[str, str]], role: str, content: str) -> None:
         transcript.append({"role": role, "content": content})
