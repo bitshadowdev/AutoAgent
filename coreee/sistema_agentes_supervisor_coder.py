@@ -1358,12 +1358,17 @@ if __name__ == '__main__':
         # Auto-generar ID basado en timestamp
         session_id = datetime.now().strftime('%Y%m%d_%H%M%S')
     
-    tarea = (
-        args.task
-        or os.environ.get('AGENT_TASK')
-        or input('Escribe tu pregunta/tarea: ').strip()
-        or 'Escribe una tool que scrappee 10 titulares de https://www.latercera.com/ y devuélvelos en lista.'
-    )
+    while True:
+        tarea = (
+            args.task
+            or os.environ.get('AGENT_TASK')
+            or input('Escribe tu pregunta/tarea: ').strip()
+        )
+        if not tarea:
+            print("Por favor, ingresa una tarea válida. No puede estar vacía.")
+            args.task = None  # Reset para que vuelva a pedir input
+            continue
+        break
 
     # Guardamos también el transcript en la sesión
     resultado = system.run(
